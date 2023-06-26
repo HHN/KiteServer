@@ -1,0 +1,43 @@
+server:
+  error:
+    include-message: always
+    include-binding-errors: always
+spring:
+  datasource:
+    password: password
+    url: jdbc:postgresql://localhost:5432/registration?charSet=UTF8
+    username:
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+        connection:
+          charSet: UTF-8
+    show-sql: true
+  mail:
+    host: "mail.gmx.net"
+    port: 587
+    username: "mergos123@gmx.de"
+    password: "123456789abc1!!!!"
+    protocol: "smtp"
+    properties:
+      mail:
+        smtp:
+          ssl:
+            trust: "*"
+          auth: true
+          starttls:
+            enable: true
+          connectiontimeout: 15000
+          timeout: 3000
+          writetimeout: 15000
+application:
+  security:
+    jwt:
+      secret-key: "404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970"
+      expiration: 86400000 # a day
+      refresh-token:
+        expiration: 604800000 # 7 days
