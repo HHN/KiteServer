@@ -1,4 +1,4 @@
-package com.hhn.kite2server.registration.token;
+package com.hhn.kite2server.account.token;
 
 import com.hhn.kite2server.appuser.AppUser;
 import lombok.Getter;

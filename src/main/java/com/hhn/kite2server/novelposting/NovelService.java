@@ -10,7 +10,7 @@ import java.util.List;
 
 @Service
 @AllArgsConstructor
-public class NovelReadAndWriteService {
+public class NovelService {
 
     private final VisualNovelService novelService;
 
@@ -23,7 +23,7 @@ public class NovelReadAndWriteService {
         return code;
     }
 
-    public long GetCreatorOfNovel(long visualNovelId) {
+    public long getCreatorOfNovel(long visualNovelId) {
         if (!novelService.doesExist(visualNovelId)) {
             return -1;
         }
@@ -40,5 +40,9 @@ public class NovelReadAndWriteService {
             return ResultCode.NOVEL_NOT_FOUND;
         }
         return novelService.delete(novelService.loadNovelById(id));
+    }
+
+    public void deleteAllNovelsOfUser(long id) {
+        novelService.deleteNovelsFromUser(id);
     }
 }

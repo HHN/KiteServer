@@ -135,4 +135,8 @@ public class LoginService {
             }
         }
     }
+
+    public void deleteAllTokensOfUserById(long id) {
+        tokenRepository.deleteTokensFromUser(id);
+    }
 }

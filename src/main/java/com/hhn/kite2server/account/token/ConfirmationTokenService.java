@@ -1,4 +1,4 @@
-package com.hhn.kite2server.registration.token;
+package com.hhn.kite2server.account.token;
 
 import com.hhn.kite2server.appuser.AppUserService;
 import com.hhn.kite2server.common.ResultCode;
@@ -25,6 +25,10 @@ public class ConfirmationTokenService {
 
     public int setConfirmedAt(String token) {
         return confirmationTokenRepository.updateConfirmedAt(token, LocalDateTime.now());
+    }
+
+    public void deleteAllTokensOfUser(long id) {
+        confirmationTokenRepository.deleteTokensFromUser(id);
     }
 
 

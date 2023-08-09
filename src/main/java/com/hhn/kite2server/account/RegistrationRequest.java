@@ -1,4 +1,4 @@
-package com.hhn.kite2server.registration;
+package com.hhn.kite2server.account;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;

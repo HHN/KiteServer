@@ -33,4 +33,8 @@ public class VisualNovelService {
     public boolean doesExist(long id) {
         return visualNovelRepository.existsById(id);
     }
+
+    public void deleteNovelsFromUser(long id) {
+        visualNovelRepository.deleteNovelsFromUser(id);
+    }
 }

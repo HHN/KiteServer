@@ -48,14 +48,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-            var isTokenValid = tokenRepository.findByToken(jwt)
-                    .map(t -> !t.isExpired() && !t.isRevoked()).orElse(false);
 
-            if (jwtService.isTokenValid(jwt, userDetails) && isTokenValid) {
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities());
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+            if (userDetails != null) {
+                var isTokenValid = tokenRepository.findByToken(jwt)
+                        .map(t -> !t.isExpired() && !t.isRevoked()).orElse(false);
+
+                if (jwtService.isTokenValid(jwt, userDetails) && isTokenValid) {
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                            userDetails, null, userDetails.getAuthorities());
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                }
             }
         }
         filterChain.doFilter(request, response); // auth it and send it to the filter.
