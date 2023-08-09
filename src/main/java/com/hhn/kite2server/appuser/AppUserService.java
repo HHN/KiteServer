@@ -6,8 +6,6 @@ import com.hhn.kite2server.email.EmailSender;
 import com.hhn.kite2server.email.EmailValidator;
 import com.hhn.kite2server.account.token.ConfirmationToken;
 import com.hhn.kite2server.account.token.ConfirmationTokenService;
-import com.hhn.kite2server.login.LoginService;
-import com.hhn.kite2server.login.token.AuthenticationToken;
 import com.hhn.kite2server.login.token.AuthenticationTokenRepository;
 import com.hhn.kite2server.novelposting.NovelService;
 import lombok.AllArgsConstructor;
@@ -116,5 +114,19 @@ public class AppUserService implements UserDetailsService {
         novelService.deleteAllNovelsOfUser(id);
         appUserRepository.deleteById(id);
         return ResultCode.SUCCESSFULLY_DELETED_USER;
+    }
+
+    public boolean changePassword(String username, String oldPassword, String newPassword) {
+        username = username.toLowerCase();
+        if (!appUserRepository.findByUsername(username).isPresent()) {
+            return false;
+        }
+        AppUser user = appUserRepository.findByUsername(username).get();
+        if (bCryptPasswordEncoder.matches(oldPassword, user.getPassword())) {
+            user.setPassword(bCryptPasswordEncoder.encode(newPassword));
+            appUserRepository.save(user);
+            return true;
+        }
+        return false;
     }
 }

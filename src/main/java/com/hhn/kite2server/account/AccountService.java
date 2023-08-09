@@ -4,7 +4,6 @@ import com.hhn.kite2server.common.ResultCode;
 import com.hhn.kite2server.appuser.AppUser;
 import com.hhn.kite2server.appuser.AppUserRole;
 import com.hhn.kite2server.appuser.AppUserService;
-import com.hhn.kite2server.login.LoginService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,5 +25,9 @@ public class AccountService {
         }
         ResultCode code = appUserService.deleteUserById(request.getAccountId());
         return code;
+    }
+
+    public boolean changePassword(String username, String oldPassword, String newPassword) {
+        return appUserService.changePassword(username, oldPassword, newPassword);
     }
 }

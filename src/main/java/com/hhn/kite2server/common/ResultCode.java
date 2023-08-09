@@ -25,7 +25,9 @@ public enum ResultCode {
     NOVEL_NOT_FOUND,
     SUCCESSFULLY_DELETED_NOVEL,
     USER_NOT_FOUND,
-    SUCCESSFULLY_DELETED_USER;
+    SUCCESSFULLY_DELETED_USER,
+    SUCCESSFULLY_CHANGED_PASSWORD,
+    CHANGE_OF_PASSWORD_FAILED;
 
     public int toInt() {
         switch (this) {
@@ -53,6 +55,8 @@ public enum ResultCode {
             case SUCCESSFULLY_DELETED_NOVEL         -> { return 22;}
             case USER_NOT_FOUND                     -> { return 23;}
             case SUCCESSFULLY_DELETED_USER          -> { return 24;}
+            case SUCCESSFULLY_CHANGED_PASSWORD      -> { return 25;}
+            case CHANGE_OF_PASSWORD_FAILED          -> { return 26;}
             default                                 -> { return -1;}
         }
     }
@@ -83,6 +87,8 @@ public enum ResultCode {
             case 22     -> { return SUCCESSFULLY_DELETED_NOVEL; }
             case 23     -> { return USER_NOT_FOUND; }
             case 24     -> { return SUCCESSFULLY_DELETED_USER; }
+            case 25     -> { return SUCCESSFULLY_CHANGED_PASSWORD; }
+            case 26     -> { return CHANGE_OF_PASSWORD_FAILED; }
             default     -> { return NONE; }
         }
     }
