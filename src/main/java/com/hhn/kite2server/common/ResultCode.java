@@ -21,7 +21,9 @@ public enum ResultCode {
     EMAIL_NOT_CONFIRMED,
     NO_NOVEL_AVAILABLE,
     SUCCESSFULLY_GOT_NOVELS,
-    SUCCESSFULLY_GOT_COMPLETION;
+    SUCCESSFULLY_GOT_COMPLETION,
+    NOVEL_NOT_FOUND,
+    SUCCESSFULLY_DELETED_NOVEL;
 
     public int toInt() {
         switch (this) {
@@ -45,6 +47,8 @@ public enum ResultCode {
             case NO_NOVEL_AVAILABLE                 -> { return 18;}
             case SUCCESSFULLY_GOT_NOVELS            -> { return 19;}
             case SUCCESSFULLY_GOT_COMPLETION        -> { return 20;}
+            case NOVEL_NOT_FOUND                    -> { return 21;}
+            case SUCCESSFULLY_DELETED_NOVEL         -> { return 22;}
             default                                 -> { return -1;}
         }
     }
@@ -60,18 +64,20 @@ public enum ResultCode {
             case 7      -> { return TOKEN_NOT_FOUND; }
             case 8      -> { return EMAIL_ALREADY_CONFIRMED; }
             case 9      -> { return TOKEN_EXPIRED; }
-            case 10      -> { return SUCCESSFULLY_CONFIRMED; }
-            case 11      -> { return SUCCESSFULLY_LOGGED_IN; }
-            case 12      -> { return SUCCESSFULLY_LOGGED_OUT; }
-            case 13      -> { return INVALID_CREDENTIALS; }
-            case 14      -> { return SUCCESSFULLY_POSTED_NOVEL; }
-            case 15      -> { return LOG_OUT_FAILED; }
-            case 16      -> { return NOT_AUTHORIZED; }
-            case 17      -> { return EMAIL_NOT_CONFIRMED; }
-            case 18      -> { return NO_NOVEL_AVAILABLE; }
-            case 19      -> { return SUCCESSFULLY_GOT_NOVELS; }
-            case 20      -> { return SUCCESSFULLY_GOT_COMPLETION; }
-            default      -> { return NONE; }
+            case 10     -> { return SUCCESSFULLY_CONFIRMED; }
+            case 11     -> { return SUCCESSFULLY_LOGGED_IN; }
+            case 12     -> { return SUCCESSFULLY_LOGGED_OUT; }
+            case 13     -> { return INVALID_CREDENTIALS; }
+            case 14     -> { return SUCCESSFULLY_POSTED_NOVEL; }
+            case 15     -> { return LOG_OUT_FAILED; }
+            case 16     -> { return NOT_AUTHORIZED; }
+            case 17     -> { return EMAIL_NOT_CONFIRMED; }
+            case 18     -> { return NO_NOVEL_AVAILABLE; }
+            case 19     -> { return SUCCESSFULLY_GOT_NOVELS; }
+            case 20     -> { return SUCCESSFULLY_GOT_COMPLETION; }
+            case 21     -> { return NOVEL_NOT_FOUND; }
+            case 22     -> { return SUCCESSFULLY_DELETED_NOVEL; }
+            default     -> { return NONE; }
         }
     }
 }

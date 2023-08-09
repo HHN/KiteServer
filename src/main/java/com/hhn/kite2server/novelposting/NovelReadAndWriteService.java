@@ -18,25 +18,27 @@ public class NovelReadAndWriteService {
         VisualNovel newNovel = new VisualNovel();
         newNovel.setTitle(request.getTitle());
         newNovel.setDescription(request.getDescription());
-        newNovel.setEnvironmentWallID(request.getEnvironmentWallID());
-        newNovel.setEnvironmentFloorID(request.getEnvironmentFloorID());
-        newNovel.setEnvironmentWindowID(request.getEnvironmentWindowID());
-        newNovel.setEnvironmentFurnitureID(request.getEnvironmentFurnitureID());
-        newNovel.setPlayerCharacterFaceID(request.getPlayerCharacterFaceID());
-        newNovel.setPlayerCharacterHairID(request.getPlayerCharacterHairID());
-        newNovel.setPlayerCharacterBodyID(request.getPlayerCharacterBodyID());
-        newNovel.setPlayerCharacterClothsID(request.getPlayerCharacterClothsID());
-        newNovel.setOpponentCharacterFaceID(request.getOpponentCharacterFaceID());
-        newNovel.setOpponentCharacterHairID(request.getOpponentCharacterHairID());
-        newNovel.setOpponentCharacterBodyID(request.getOpponentCharacterBodyID());
-        newNovel.setOpponentCharacterClothsID(request.getOpponentCharacterClothsID());
-        newNovel.setDialog(request.getDialog());
-
+        newNovel.setCreator(request.getCreator());
         ResultCode code = novelService.saveNovel(newNovel);
         return code;
     }
 
+    public long GetCreatorOfNovel(long visualNovelId) {
+        if (!novelService.doesExist(visualNovelId)) {
+            return -1;
+        }
+        return novelService.loadNovelById(visualNovelId).getCreator();
+    }
+
     public List<VisualNovel> getNovels() {
         return novelService.getAllNovels();
+    }
+
+
+    public ResultCode delete(long id) {
+        if (!novelService.doesExist(id)) {
+            return ResultCode.NOVEL_NOT_FOUND;
+        }
+        return novelService.delete(novelService.loadNovelById(id));
     }
 }

@@ -24,4 +24,13 @@ public class VisualNovelService {
         visualNovelRepository.save(novel);
         return ResultCode.SUCCESSFULLY_POSTED_NOVEL;
     }
+
+    public ResultCode delete(VisualNovel novel) {
+        visualNovelRepository.delete(novel);
+        return ResultCode.SUCCESSFULLY_DELETED_NOVEL;
+    }
+
+    public boolean doesExist(long id) {
+        return visualNovelRepository.existsById(id);
+    }
 }
