@@ -19,11 +19,8 @@ public class AccountService {
         return code;
     }
 
-    public ResultCode delete(long id) {
-        if (!appUserService.isUserExistentById(id)) {
-            return ResultCode.USER_NOT_FOUND;
-        }
-        ResultCode code = appUserService.deleteUserById(id);
+    public ResultCode delete(AppUser user) {
+        ResultCode code = appUserService.deleteUserById(user.getId());
         return code;
     }
 

@@ -17,7 +17,7 @@ public class DeleteAccountController {
     @DeleteMapping
     public Response deleteAccount(@AuthenticationPrincipal AppUser user) {
         Response response = new Response();
-        ResultCode code = accountService.delete(user.getId());
+        ResultCode code = accountService.delete(user);
         response.setResultCode(code.toInt());
         response.setResultText(code.toString());
         return response;
