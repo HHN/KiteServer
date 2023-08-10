@@ -1,5 +1,8 @@
 package com.hhn.kite2server.novels;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.hhn.kite2server.appuser.AppUser;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -19,5 +22,14 @@ public class VisualNovel {
     private Long id;
     private String title;
     private String description;
-    private Long creator;
+
+    @JsonIgnore
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn()
+    private AppUser creator;
+
+    @JsonProperty("creator")
+    public Long getCreatorId() {
+        return (creator != null) ? creator.getId() : null;
+    }
 }

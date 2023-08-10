@@ -1,5 +1,7 @@
 package com.hhn.kite2server.novelposting;
 
+import com.hhn.kite2server.appuser.AppUser;
+import com.hhn.kite2server.appuser.AppUserService;
 import com.hhn.kite2server.common.ResultCode;
 import com.hhn.kite2server.novels.VisualNovel;
 import com.hhn.kite2server.novels.VisualNovelService;
@@ -13,12 +15,16 @@ import java.util.List;
 public class NovelService {
 
     private final VisualNovelService novelService;
+    private final AppUserService appUserService;
 
     public ResultCode post(NovelPostingRequest request) {
+        if (!appUserService.isUserExistentById(request.getCreator())) {
+            return ResultCode.USER_NOT_FOUND;
+        }
         VisualNovel newNovel = new VisualNovel();
         newNovel.setTitle(request.getTitle());
         newNovel.setDescription(request.getDescription());
-        newNovel.setCreator(request.getCreator());
+        newNovel.setCreator(appUserService.loadUserById(request.getCreator()));
         ResultCode code = novelService.saveNovel(newNovel);
         return code;
     }
@@ -27,7 +33,7 @@ public class NovelService {
         if (!novelService.doesExist(visualNovelId)) {
             return -1;
         }
-        return novelService.loadNovelById(visualNovelId).getCreator();
+        return novelService.loadNovelById(visualNovelId).getCreator().getId();
     }
 
     public List<VisualNovel> getNovels() {
@@ -42,7 +48,7 @@ public class NovelService {
         return novelService.delete(novelService.loadNovelById(id));
     }
 
-    public void deleteAllNovelsOfUser(long id) {
-        novelService.deleteNovelsFromUser(id);
+    public void deleteAllNovelsOfUser(AppUser user) {
+        novelService.deleteNovelsFromUser(user);
     }
 }

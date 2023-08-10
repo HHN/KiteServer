@@ -1,6 +1,7 @@
 package com.hhn.kite2server.novels;
 
 import com.hhn.kite2server.appuser.AppUser;
+import com.hhn.kite2server.appuser.AppUserService;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -18,7 +19,7 @@ public interface VisualNovelRepository extends JpaRepository<VisualNovel, Long> 
     @Transactional
     @Modifying
     @Query(value = """
-    delete from VisualNovel t where t.creator = :id
+    delete from VisualNovel t where t.creator = :user
     """)
-    void deleteNovelsFromUser(@Param("id") Long userId);
+    void deleteNovelsFromUser(@Param("user") AppUser user);
 }

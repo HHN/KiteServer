@@ -8,6 +8,7 @@ import com.hhn.kite2server.account.token.ConfirmationToken;
 import com.hhn.kite2server.account.token.ConfirmationTokenService;
 import com.hhn.kite2server.login.token.AuthenticationTokenRepository;
 import com.hhn.kite2server.novelposting.NovelService;
+import com.hhn.kite2server.novels.VisualNovelService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -27,7 +28,7 @@ public class AppUserService implements UserDetailsService {
     private final ConfirmationTokenService confirmationTokenService;
     private final EmailValidator emailValidator;
     private final EmailSender emailSender;
-    private final NovelService novelService;
+    private final VisualNovelService novelService;
     private final AuthenticationTokenRepository tokenRepository;
 
     @Override
@@ -109,9 +110,13 @@ public class AppUserService implements UserDetailsService {
     }
 
     public ResultCode deleteUserById(long id) {
+        if (!isUserExistentById(id)) {
+            return ResultCode.USER_NOT_FOUND;
+        }
         confirmationTokenService.deleteAllTokensOfUser(id);
         tokenRepository.deleteTokensFromUser(id);
-        novelService.deleteAllNovelsOfUser(id);
+        AppUser appUser = loadUserById(id);
+        novelService.deleteNovelsFromUser(appUser);
         appUserRepository.deleteById(id);
         return ResultCode.SUCCESSFULLY_DELETED_USER;
     }

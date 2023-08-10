@@ -1,5 +1,6 @@
 package com.hhn.kite2server.novels;
 
+import com.hhn.kite2server.appuser.AppUser;
 import com.hhn.kite2server.common.ResultCode;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,7 +35,7 @@ public class VisualNovelService {
         return visualNovelRepository.existsById(id);
     }
 
-    public void deleteNovelsFromUser(long id) {
-        visualNovelRepository.deleteNovelsFromUser(id);
+    public void deleteNovelsFromUser(AppUser user) {
+        visualNovelRepository.deleteNovelsFromUser(user);
     }
 }
