@@ -15,16 +15,11 @@ public class DeleteAccountController {
     private final AccountService accountService;
 
     @DeleteMapping
-    public Response deleteAccount(@AuthenticationPrincipal AppUser user, @RequestBody DeleteAccountRequest request) {
+    public Response deleteAccount(@AuthenticationPrincipal AppUser user) {
         Response response = new Response();
-        if (user.getId() != request.getAccountId()) {
-            response.setResultCode(ResultCode.NOT_AUTHORIZED.toInt());
-            response.setResultText(ResultCode.NOT_AUTHORIZED.toString());
-        } else {
-            ResultCode code = accountService.delete(request);
-            response.setResultCode(code.toInt());
-            response.setResultText(code.toString());
-        }
+        ResultCode code = accountService.delete(user.getId());
+        response.setResultCode(code.toInt());
+        response.setResultText(code.toString());
         return response;
     }
 }

@@ -14,5 +14,4 @@ import java.util.List;
 public class NovelPostingRequest {
     private String title;
     private String description;
-    private Long creator;
 }

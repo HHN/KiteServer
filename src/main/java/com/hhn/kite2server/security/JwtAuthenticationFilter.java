@@ -1,10 +1,7 @@
 package com.hhn.kite2server.security;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hhn.kite2server.appuser.AppUserService;
-import com.hhn.kite2server.common.ResultCode;
 import com.hhn.kite2server.login.token.AuthenticationTokenRepository;
-import com.hhn.kite2server.response.Response;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

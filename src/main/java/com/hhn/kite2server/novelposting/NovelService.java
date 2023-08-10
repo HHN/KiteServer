@@ -17,14 +17,11 @@ public class NovelService {
     private final VisualNovelService novelService;
     private final AppUserService appUserService;
 
-    public ResultCode post(NovelPostingRequest request) {
-        if (!appUserService.isUserExistentById(request.getCreator())) {
-            return ResultCode.USER_NOT_FOUND;
-        }
+    public ResultCode post(AppUser user, NovelPostingRequest request) {
         VisualNovel newNovel = new VisualNovel();
         newNovel.setTitle(request.getTitle());
         newNovel.setDescription(request.getDescription());
-        newNovel.setCreator(appUserService.loadUserById(request.getCreator()));
+        newNovel.setCreator(user);
         ResultCode code = novelService.saveNovel(newNovel);
         return code;
     }

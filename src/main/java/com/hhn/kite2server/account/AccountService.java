@@ -19,15 +19,15 @@ public class AccountService {
         return code;
     }
 
-    public ResultCode delete(DeleteAccountRequest request) {
-        if (!appUserService.isUserExistentById(request.getAccountId())) {
+    public ResultCode delete(long id) {
+        if (!appUserService.isUserExistentById(id)) {
             return ResultCode.USER_NOT_FOUND;
         }
-        ResultCode code = appUserService.deleteUserById(request.getAccountId());
+        ResultCode code = appUserService.deleteUserById(id);
         return code;
     }
 
-    public boolean changePassword(String username, String oldPassword, String newPassword) {
-        return appUserService.changePassword(username, oldPassword, newPassword);
+    public boolean changePassword(AppUser user, String oldPassword, String newPassword) {
+        return appUserService.changePassword(user, oldPassword, newPassword);
     }
 }

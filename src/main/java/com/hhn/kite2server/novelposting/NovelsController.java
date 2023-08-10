@@ -18,9 +18,9 @@ public class NovelsController {
     private final NovelService postingService;
 
     @PostMapping
-    public Response post(@RequestBody NovelPostingRequest request) {
+    public Response post(@AuthenticationPrincipal AppUser user, @RequestBody NovelPostingRequest request) {
         Response response = new Response();
-        ResultCode resultCode = postingService.post(request);
+        ResultCode resultCode = postingService.post(user, request);
         response.setResultText(resultCode.toString());
         response.setResultCode(resultCode.toInt());
         return response;

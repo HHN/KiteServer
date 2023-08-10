@@ -121,12 +121,7 @@ public class AppUserService implements UserDetailsService {
         return ResultCode.SUCCESSFULLY_DELETED_USER;
     }
 
-    public boolean changePassword(String username, String oldPassword, String newPassword) {
-        username = username.toLowerCase();
-        if (!appUserRepository.findByUsername(username).isPresent()) {
-            return false;
-        }
-        AppUser user = appUserRepository.findByUsername(username).get();
+    public boolean changePassword(AppUser user, String oldPassword, String newPassword) {
         if (bCryptPasswordEncoder.matches(oldPassword, user.getPassword())) {
             user.setPassword(bCryptPasswordEncoder.encode(newPassword));
             appUserRepository.save(user);
