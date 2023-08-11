@@ -1,4 +1,4 @@
-package com.hhn.kite2server.account;
+package com.hhn.kite2server.account.changepassword;
 
 import lombok.*;
 

@@ -39,6 +39,8 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/novels").permitAll()
                         .requestMatchers(HttpMethod.POST, "/ai").permitAll()
                         .requestMatchers(HttpMethod.POST, "/vtt").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/resetpassword").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/resetpassword/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(daoAuthenticationProvider())

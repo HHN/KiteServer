@@ -1,18 +1,16 @@
-package com.hhn.kite2server.account;
+package com.hhn.kite2server.account.reigstration;
 
-import com.hhn.kite2server.appuser.AppUser;
 import com.hhn.kite2server.common.ResultCode;
 import com.hhn.kite2server.response.Response;
 import lombok.AllArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping(path = {"registration"})
 @AllArgsConstructor
-public class AccountController {
+public class RegistrationController {
 
-    private final AccountService accountService;
+    private final RegistrationService accountService;
 
     @PostMapping
     public Response register(@RequestBody RegistrationRequest request) {

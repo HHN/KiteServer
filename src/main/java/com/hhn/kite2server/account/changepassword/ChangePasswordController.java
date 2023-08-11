@@ -1,4 +1,4 @@
-package com.hhn.kite2server.account;
+package com.hhn.kite2server.account.changepassword;
 
 import com.hhn.kite2server.appuser.AppUser;
 import com.hhn.kite2server.common.ResultCode;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class ChangePasswordController {
 
-    private final AccountService accountService;
+    private final ChangePasswordService accountService;
 
     @PostMapping
     public Response changePassword(@AuthenticationPrincipal AppUser user, @RequestBody ChangePasswordRequest request) {

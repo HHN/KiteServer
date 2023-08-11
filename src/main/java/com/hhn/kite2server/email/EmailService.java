@@ -23,7 +23,7 @@ public class EmailService implements EmailSender{
 
     @Override
     @Async
-    public void send(String to, String email) {
+    public void send(String to, String email, String subject) {
         try {
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "utf-8");
@@ -32,7 +32,7 @@ public class EmailService implements EmailSender{
             helper.setFrom(new InternetAddress("mergos123@gmx.de"));
             helper.setText(email, true);
             helper.setTo(toAddress);
-            helper.setSubject("Confirm your email");
+            helper.setSubject(subject);
             mailSender.send(mimeMessage);
 
         } catch (jakarta.mail.MessagingException e) {

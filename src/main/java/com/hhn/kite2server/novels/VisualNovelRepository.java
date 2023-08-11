@@ -1,7 +1,6 @@
 package com.hhn.kite2server.novels;
 
 import com.hhn.kite2server.appuser.AppUser;
-import com.hhn.kite2server.appuser.AppUserService;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
