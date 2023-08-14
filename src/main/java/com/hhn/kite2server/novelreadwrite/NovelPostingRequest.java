@@ -1,11 +1,9 @@
-package com.hhn.kite2server.novelposting;
+package com.hhn.kite2server.novelreadwrite;
 
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.ToString;
-
-import java.util.List;
 
 @Getter
 @AllArgsConstructor

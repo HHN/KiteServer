@@ -1,4 +1,4 @@
-package com.hhn.kite2server.novelposting;
+package com.hhn.kite2server.novelreadwrite;
 
 import lombok.*;
 

@@ -17,4 +17,5 @@ public class Response {
     private String refreshToken;
     private String completion;
     private List<VisualNovel> novels;
+    public VisualNovel specifiedNovel;
 }

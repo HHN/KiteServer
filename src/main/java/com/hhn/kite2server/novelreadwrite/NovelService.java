@@ -1,4 +1,4 @@
-package com.hhn.kite2server.novelposting;
+package com.hhn.kite2server.novelreadwrite;
 
 import com.hhn.kite2server.appuser.AppUser;
 import com.hhn.kite2server.appuser.AppUserService;
@@ -47,5 +47,19 @@ public class NovelService {
 
     public void deleteAllNovelsOfUser(AppUser user) {
         novelService.deleteNovelsFromUser(user);
+    }
+
+    public VisualNovel findNovel(String query) {
+        try {
+            long id = Long.parseLong(query);
+            if (novelService.doesExist(id)) {
+                return novelService.loadNovelById(id);
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            return null;
+        }
+
     }
 }

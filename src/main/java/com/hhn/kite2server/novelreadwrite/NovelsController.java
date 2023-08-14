@@ -1,4 +1,4 @@
-package com.hhn.kite2server.novelposting;
+package com.hhn.kite2server.novelreadwrite;
 
 import com.hhn.kite2server.appuser.AppUser;
 import com.hhn.kite2server.common.ResultCode;
