@@ -1,14 +1,10 @@
 package com.hhn.kite2server.novelreadwrite;
 
-import com.hhn.kite2server.appuser.AppUser;
 import com.hhn.kite2server.common.ResultCode;
 import com.hhn.kite2server.novels.VisualNovel;
 import com.hhn.kite2server.response.Response;
 import lombok.AllArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping(path = "novel")
