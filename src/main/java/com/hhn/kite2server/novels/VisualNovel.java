@@ -24,7 +24,7 @@ public class VisualNovel {
     private String description;
 
     @JsonIgnore
-    @OneToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn()
     private AppUser creator;
 

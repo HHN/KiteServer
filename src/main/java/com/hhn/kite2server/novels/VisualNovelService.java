@@ -1,5 +1,6 @@
 package com.hhn.kite2server.novels;
 
+import com.hhn.kite2server.account.comment.CommentService;
 import com.hhn.kite2server.appuser.AppUser;
 import com.hhn.kite2server.common.ResultCode;
 import lombok.AllArgsConstructor;
@@ -12,6 +13,7 @@ import java.util.List;
 public class VisualNovelService {
 
     private final VisualNovelRepository visualNovelRepository;
+    private final CommentService commentService;
 
     public VisualNovel loadNovelById(Long id) {
         return visualNovelRepository.findById(id).get();
@@ -28,6 +30,7 @@ public class VisualNovelService {
 
     public ResultCode delete(VisualNovel novel) {
         visualNovelRepository.delete(novel);
+        commentService.deleteAllCommentsOfVisualNovel(novel);
         return ResultCode.SUCCESSFULLY_DELETED_NOVEL;
     }
 

@@ -1,5 +1,6 @@
 package com.hhn.kite2server.account.deleteaccount;
 
+import com.hhn.kite2server.account.comment.CommentService;
 import com.hhn.kite2server.account.resetpassword.ResetPasswordService;
 import com.hhn.kite2server.account.token.ConfirmationTokenService;
 import com.hhn.kite2server.appuser.AppUserRepository;
@@ -18,6 +19,7 @@ public class DeleteAccountService {
     private final ResetPasswordService resetPasswordTokenService;
     private final VisualNovelService novelService;
     private final AuthenticationTokenRepository tokenRepository;
+    private final CommentService commentService;
 
     public ResultCode delete(AppUser user) {
         if (!appUserRepository.existsById(user.getId())) {
@@ -28,6 +30,7 @@ public class DeleteAccountService {
         tokenRepository.deleteTokensFromUser(user.getId());
         novelService.deleteNovelsFromUser(user);
         appUserRepository.deleteById(user.getId());
+        commentService.deleteAllCommentsOfUser(user);
         return ResultCode.SUCCESSFULLY_DELETED_USER;
     }
 }

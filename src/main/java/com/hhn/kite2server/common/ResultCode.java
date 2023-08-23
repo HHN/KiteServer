@@ -31,7 +31,17 @@ public enum ResultCode {
     SUCCESSFULLY_RESETED_PASSWORD,
     PASSWORD_ALREADY_RESETED,
     SUCCESSFULLY_INITIATED_RESET,
-    SUCCESSFULLY_FOUND_NOVEL;
+    SUCCESSFULLY_FOUND_NOVEL,
+    SUCCESSFULLY_POSTED_COMMENT,
+    SUCCESSFULLY_UPDATED_COMMENT,
+    SUCCESSFULLY_DELETED_COMMENT,
+    SUCCESSFULLY_GOT_COMMENTS_FOR_NOVEL,
+    NO_COMMENTS_FOUND_FOR_NOVEL,
+    COMMENT_NOT_FOUND,
+    FAILED_TO_POST_COMMENT,
+    FAILED_TO_UPDATE_COMMENT,
+    FAILED_TO_DELETE_COMMENT,
+    FAILED_TO_GET_COMMENTS_FOR_NOVEL;
 
     public int toInt() {
         switch (this) {
@@ -65,6 +75,16 @@ public enum ResultCode {
             case PASSWORD_ALREADY_RESETED           -> { return 28;}
             case SUCCESSFULLY_INITIATED_RESET       -> { return 29;}
             case SUCCESSFULLY_FOUND_NOVEL           -> { return 30;}
+            case SUCCESSFULLY_POSTED_COMMENT        -> { return 31;}
+            case SUCCESSFULLY_UPDATED_COMMENT       -> { return 32;}
+            case SUCCESSFULLY_DELETED_COMMENT       -> { return 33;}
+            case SUCCESSFULLY_GOT_COMMENTS_FOR_NOVEL-> { return 34;}
+            case NO_COMMENTS_FOUND_FOR_NOVEL        -> { return 35;}
+            case COMMENT_NOT_FOUND                  -> { return 36;}
+            case FAILED_TO_POST_COMMENT             -> { return 37;}
+            case FAILED_TO_UPDATE_COMMENT           -> { return 38;}
+            case FAILED_TO_DELETE_COMMENT           -> { return 39;}
+            case FAILED_TO_GET_COMMENTS_FOR_NOVEL   -> { return 40;}
             default                                 -> { return -1;}
         }
     }
@@ -101,6 +121,16 @@ public enum ResultCode {
             case 28     -> { return PASSWORD_ALREADY_RESETED; }
             case 29     -> { return SUCCESSFULLY_INITIATED_RESET; }
             case 30     -> { return SUCCESSFULLY_FOUND_NOVEL; }
+            case 31     -> { return SUCCESSFULLY_POSTED_COMMENT; }
+            case 32     -> { return SUCCESSFULLY_UPDATED_COMMENT; }
+            case 33     -> { return SUCCESSFULLY_DELETED_COMMENT; }
+            case 34     -> { return SUCCESSFULLY_GOT_COMMENTS_FOR_NOVEL; }
+            case 35     -> { return NO_COMMENTS_FOUND_FOR_NOVEL; }
+            case 36     -> { return COMMENT_NOT_FOUND; }
+            case 37     -> { return FAILED_TO_POST_COMMENT; }
+            case 38     -> { return FAILED_TO_UPDATE_COMMENT; }
+            case 39     -> { return FAILED_TO_DELETE_COMMENT; }
+            case 40     -> { return FAILED_TO_GET_COMMENTS_FOR_NOVEL; }
             default     -> { return NONE; }
         }
     }
