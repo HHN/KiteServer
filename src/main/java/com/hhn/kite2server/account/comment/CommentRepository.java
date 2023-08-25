@@ -19,7 +19,7 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     void deleteByAuthor(AppUser appUser);
 
-    void deleteByVisualNovel(VisualNovel visualNovel);
+    void deleteByVisualNovelId(Long visualNovelId);
 
-    List<Comment> findByVisualNovel(VisualNovel visualNovel);
+    List<Comment> findByVisualNovelId(Long visualNovelId);
 }

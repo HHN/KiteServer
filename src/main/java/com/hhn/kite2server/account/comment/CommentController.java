@@ -20,11 +20,7 @@ public class CommentController {
 
     @PostMapping
     public Response postComment(@AuthenticationPrincipal AppUser user, @RequestBody PostCommentRequest request) {
-        Response response = new Response();
-        ResultCode code = commentService.postComment(user, request);
-        response.setResultCode(code.toInt());
-        response.setResultText(code.toString());
-        return response;
+        return commentService.postComment(user, request);
     }
 
     @GetMapping

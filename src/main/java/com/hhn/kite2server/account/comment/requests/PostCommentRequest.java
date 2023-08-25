@@ -9,5 +9,5 @@ import lombok.*;
 @ToString
 public class PostCommentRequest {
     private String comment;
-    private long visualNovelId;
+    private Long visualNovelId;
 }

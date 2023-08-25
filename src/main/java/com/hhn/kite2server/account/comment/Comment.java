@@ -2,7 +2,6 @@ package com.hhn.kite2server.account.comment;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.hhn.kite2server.appuser.AppUser;
-import com.hhn.kite2server.novels.VisualNovel;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -21,14 +20,10 @@ public class Comment {
 
     private Long id;
     private String comment;
+    private Long visualNovelId;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn()
-    private VisualNovel visualNovel;
-
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn()
+    @JoinColumn(nullable = false)
     private AppUser author;
 }

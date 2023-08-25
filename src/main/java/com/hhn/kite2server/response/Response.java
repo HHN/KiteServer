@@ -1,6 +1,6 @@
 package com.hhn.kite2server.response;
 
-import com.hhn.kite2server.account.comment.Comment;
+import com.hhn.kite2server.account.comment.CommentInformation;
 import com.hhn.kite2server.novels.VisualNovel;
 import lombok.*;
 
@@ -18,6 +18,6 @@ public class Response {
     private String refreshToken;
     private String completion;
     private List<VisualNovel> novels;
-    private List<Comment> comments;
+    private List<CommentInformation> comments;
     public VisualNovel specifiedNovel;
 }

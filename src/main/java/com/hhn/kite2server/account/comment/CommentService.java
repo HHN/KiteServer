@@ -12,6 +12,8 @@ import com.hhn.kite2server.response.Response;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,21 +24,31 @@ public class CommentService {
     private final CommentRepository commentRepository;
     private final VisualNovelRepository novelRepository;
 
-    public ResultCode postComment(AppUser user, PostCommentRequest request) {
+    public Response postComment(AppUser user, PostCommentRequest request) {
+        Response response = new Response();
+
         if (user == null || request == null) {
-            return ResultCode.FAILED_TO_POST_COMMENT;
+            ResultCode code = ResultCode.FAILED_TO_POST_COMMENT;
+            response.setResultCode(code.toInt());
+            response.setResultText(code.toString());
         }
         Optional<VisualNovel> optionalNovel = novelRepository.findById(request.getVisualNovelId());
 
-        if (!optionalNovel.isPresent()) {
-            return ResultCode.NOVEL_NOT_FOUND;
+        if (!optionalNovel.isPresent() && (request.getVisualNovelId() >= 0)) {
+            ResultCode code = ResultCode.NOVEL_NOT_FOUND;
+            response.setResultCode(code.toInt());
+            response.setResultText(code.toString());
         }
         Comment comment = new Comment();
         comment.setComment(request.getComment());
-        comment.setVisualNovel(optionalNovel.get());
+        comment.setVisualNovelId(request.getVisualNovelId());
         comment.setAuthor(user);
         commentRepository.save(comment);
-        return ResultCode.SUCCESSFULLY_POSTED_COMMENT;
+        ResultCode code = ResultCode.SUCCESSFULLY_POSTED_COMMENT;
+        response.setResultCode(code.toInt());
+        response.setResultText(code.toString());
+        SetComments(request.getVisualNovelId(), response);
+        return response;
     }
 
     public Response getComments(GetCommentsRequest request) {
@@ -50,18 +62,34 @@ public class CommentService {
         }
         Optional<VisualNovel> optionalNovel = novelRepository.findById(request.getVisualNovelId());
 
-        if (!optionalNovel.isPresent()) {
+        if (!optionalNovel.isPresent() && (request.getVisualNovelId() >= 0)) {
             ResultCode code = ResultCode.NOVEL_NOT_FOUND;
             response.setResultCode(code.toInt());
             response.setResultText(code.toString());
             return response;
         }
-        List<Comment> commentList = commentRepository.findByVisualNovel(optionalNovel.get());
-        response.setComments(commentList);
+        SetComments(request.getVisualNovelId(), response);
         ResultCode code = ResultCode.SUCCESSFULLY_GOT_COMMENTS_FOR_NOVEL;
         response.setResultCode(code.toInt());
         response.setResultText(code.toString());
         return response;
+    }
+
+    private void SetComments(Long visualNovelId, Response response) {
+        List<Comment> commentList = commentRepository.findByVisualNovelId(visualNovelId);
+        List<CommentInformation> responseList = new ArrayList<>();
+
+        for (Comment comment : commentList) {
+            CommentInformation commentInformation = new CommentInformation();
+            commentInformation.setComment(comment.getComment());
+            commentInformation.setId(comment.getId());
+            commentInformation.setAuthor(comment.getAuthor().getUsername());
+            //Set liked
+            //Set like count
+            responseList.add(commentInformation);
+        }
+        responseList.sort(Comparator.comparingLong(CommentInformation::getId));
+        response.setComments(responseList);
     }
 
     public ResultCode changeComment(AppUser user, ChangeCommentRequest request) {
@@ -103,7 +131,7 @@ public class CommentService {
         commentRepository.deleteByAuthor(user);
     }
 
-    public void deleteAllCommentsOfVisualNovel(VisualNovel visualNovel) {
-        commentRepository.deleteByVisualNovel(visualNovel);
+    public void deleteAllCommentsOfVisualNovel(Long visualNovelId) {
+        commentRepository.deleteByVisualNovelId(visualNovelId);
     }
 }

@@ -30,7 +30,7 @@ public class VisualNovelService {
 
     public ResultCode delete(VisualNovel novel) {
         visualNovelRepository.delete(novel);
-        commentService.deleteAllCommentsOfVisualNovel(novel);
+        commentService.deleteAllCommentsOfVisualNovel(novel.getId());
         return ResultCode.SUCCESSFULLY_DELETED_NOVEL;
     }
 
