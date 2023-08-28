@@ -24,25 +24,17 @@ public class CommentController {
     }
 
     @GetMapping
-    public Response getComments(@RequestBody GetCommentsRequest request) {
-        return commentService.getComments(request);
+    public Response getComments(@AuthenticationPrincipal AppUser user, @RequestBody GetCommentsRequest request) {
+        return commentService.getComments(user, request);
     }
 
     @PutMapping
     public Response changeComment(@AuthenticationPrincipal AppUser user, @RequestBody ChangeCommentRequest request) {
-        Response response = new Response();
-        ResultCode code = commentService.changeComment(user, request);
-        response.setResultCode(code.toInt());
-        response.setResultText(code.toString());
-        return response;
+        return commentService.changeComment(user, request);
     }
 
     @DeleteMapping
     public Response deleteComment(@AuthenticationPrincipal AppUser user, @RequestBody DeleteCommentRequest request) {
-        Response response = new Response();
-        ResultCode code = commentService.deleteComment(user, request);
-        response.setResultCode(code.toInt());
-        response.setResultText(code.toString());
-        return response;
+        return commentService.deleteComment(user, request);
     }
 }

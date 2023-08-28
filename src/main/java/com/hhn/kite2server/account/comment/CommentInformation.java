@@ -14,5 +14,6 @@ public class CommentInformation {
     private String comment;
     private String author;
     private Long likeCount;
-    private boolean liked;
+    private Boolean liked;
+    private Boolean isOwnComment;
 }

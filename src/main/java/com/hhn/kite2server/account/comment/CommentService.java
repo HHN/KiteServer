@@ -47,11 +47,11 @@ public class CommentService {
         ResultCode code = ResultCode.SUCCESSFULLY_POSTED_COMMENT;
         response.setResultCode(code.toInt());
         response.setResultText(code.toString());
-        SetComments(request.getVisualNovelId(), response);
+        SetComments(user.getUsername(), request.getVisualNovelId(), response);
         return response;
     }
 
-    public Response getComments(GetCommentsRequest request) {
+    public Response getComments(AppUser user, GetCommentsRequest request) {
         Response response = new Response();
 
         if (request == null) {
@@ -68,14 +68,16 @@ public class CommentService {
             response.setResultText(code.toString());
             return response;
         }
-        SetComments(request.getVisualNovelId(), response);
+        String username = "";
+        if (user != null) { username = user.getUsername(); }
+        SetComments(username, request.getVisualNovelId(), response);
         ResultCode code = ResultCode.SUCCESSFULLY_GOT_COMMENTS_FOR_NOVEL;
         response.setResultCode(code.toInt());
         response.setResultText(code.toString());
         return response;
     }
 
-    private void SetComments(Long visualNovelId, Response response) {
+    private void SetComments(String username, Long visualNovelId, Response response) {
         List<Comment> commentList = commentRepository.findByVisualNovelId(visualNovelId);
         List<CommentInformation> responseList = new ArrayList<>();
 
@@ -84,6 +86,7 @@ public class CommentService {
             commentInformation.setComment(comment.getComment());
             commentInformation.setId(comment.getId());
             commentInformation.setAuthor(comment.getAuthor().getUsername());
+            commentInformation.setIsOwnComment(username.equals(commentInformation.getAuthor()));
             //Set liked
             //Set like count
             responseList.add(commentInformation);
@@ -92,39 +95,70 @@ public class CommentService {
         response.setComments(responseList);
     }
 
-    public ResultCode changeComment(AppUser user, ChangeCommentRequest request) {
+    public Response changeComment(AppUser user, ChangeCommentRequest request) {
+        Response response = new Response();
+
         if (user == null || request == null) {
-            return ResultCode.FAILED_TO_UPDATE_COMMENT;
+            ResultCode code = ResultCode.FAILED_TO_UPDATE_COMMENT;
+            response.setResultCode(code.toInt());
+            response.setResultText(code.toString());
+            return response;
         }
         Optional<Comment> optionalComment = commentRepository.findById(request.getId());
 
         if (!optionalComment.isPresent()) {
-            return ResultCode.COMMENT_NOT_FOUND;
+            ResultCode code = ResultCode.COMMENT_NOT_FOUND;
+            response.setResultCode(code.toInt());
+            response.setResultText(code.toString());
+            return response;
         }
         if (!optionalComment.get().getAuthor().equals(user)) {
-            return ResultCode.NOT_AUTHORIZED;
+            ResultCode code = ResultCode.NOT_AUTHORIZED;
+            response.setResultCode(code.toInt());
+            response.setResultText(code.toString());
+            return response;
         }
         Comment comment = optionalComment.get();
         comment.setComment(request.getComment());
         commentRepository.save(comment);
-        return ResultCode.SUCCESSFULLY_UPDATED_COMMENT;
+        ResultCode code = ResultCode.SUCCESSFULLY_UPDATED_COMMENT;
+        response.setResultCode(code.toInt());
+        response.setResultText(code.toString());
+        SetComments(user.getUsername(), comment.getVisualNovelId(), response);
+        return response;
     }
 
-    public ResultCode deleteComment(AppUser user, DeleteCommentRequest request) {
+    public Response deleteComment(AppUser user, DeleteCommentRequest request) {
+        Response response = new Response();
+
         if (user == null || request == null) {
-            return ResultCode.FAILED_TO_DELETE_COMMENT;
+            ResultCode code = ResultCode.FAILED_TO_DELETE_COMMENT;
+            response.setResultCode(code.toInt());
+            response.setResultText(code.toString());
+            return response;
         }
         Optional<Comment> optionalComment = commentRepository.findById(request.getId());
 
         if (!optionalComment.isPresent()) {
-            return ResultCode.COMMENT_NOT_FOUND;
+            ResultCode code = ResultCode.COMMENT_NOT_FOUND;
+            response.setResultCode(code.toInt());
+            response.setResultText(code.toString());
+            return response;
         }
         if (!optionalComment.get().getAuthor().equals(user)) {
-            return ResultCode.NOT_AUTHORIZED;
+            ResultCode code = ResultCode.NOT_AUTHORIZED;
+            response.setResultCode(code.toInt());
+            response.setResultText(code.toString());
+            return response;
         }
         Comment comment = optionalComment.get();
+        long visualNovelId = comment.getVisualNovelId();
         commentRepository.delete(comment);
-        return ResultCode.SUCCESSFULLY_DELETED_COMMENT;
+        ResultCode code = ResultCode.SUCCESSFULLY_DELETED_COMMENT;
+        response.setResultCode(code.toInt());
+        response.setResultText(code.toString());
+        SetComments(user.getUsername(), visualNovelId, response);
+        return response;
     }
 
     public void deleteAllCommentsOfUser(AppUser user) {
