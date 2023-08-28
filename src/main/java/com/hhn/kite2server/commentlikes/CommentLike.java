@@ -1,7 +1,7 @@
-package com.hhn.kite2server.account.commentlikes;
+package com.hhn.kite2server.commentlikes;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.hhn.kite2server.account.comment.Comment;
+import com.hhn.kite2server.comment.Comment;
 import com.hhn.kite2server.appuser.AppUser;
 import jakarta.persistence.*;
 import lombok.EqualsAndHashCode;

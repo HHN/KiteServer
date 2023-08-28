@@ -1,12 +1,11 @@
-package com.hhn.kite2server.account.comment;
+package com.hhn.kite2server.comment;
 
-import com.hhn.kite2server.account.comment.requests.ChangeCommentRequest;
-import com.hhn.kite2server.account.comment.requests.DeleteCommentRequest;
-import com.hhn.kite2server.account.comment.requests.GetCommentsRequest;
-import com.hhn.kite2server.account.comment.requests.PostCommentRequest;
-import com.hhn.kite2server.account.commentlikes.CommentLike;
-import com.hhn.kite2server.account.commentlikes.CommentLikeRepository;
-import com.hhn.kite2server.account.commentlikes.CommentLikeService;
+import com.hhn.kite2server.comment.requests.ChangeCommentRequest;
+import com.hhn.kite2server.comment.requests.DeleteCommentRequest;
+import com.hhn.kite2server.comment.requests.GetCommentsRequest;
+import com.hhn.kite2server.comment.requests.PostCommentRequest;
+import com.hhn.kite2server.commentlikes.CommentLike;
+import com.hhn.kite2server.commentlikes.CommentLikeRepository;
 import com.hhn.kite2server.appuser.AppUser;
 import com.hhn.kite2server.common.ResultCode;
 import com.hhn.kite2server.novels.VisualNovel;
@@ -181,6 +180,11 @@ public class CommentService {
     }
 
     public void deleteAllCommentsOfVisualNovel(Long visualNovelId) {
+        List<Comment> comments = commentRepository.findByVisualNovelId(visualNovelId);
+
+        for (Comment comment : comments) {
+            commentLikeRepository.deleteByComment(comment);
+        }
         commentRepository.deleteByVisualNovelId(visualNovelId);
     }
 

@@ -1,14 +1,12 @@
-package com.hhn.kite2server.account.commentlikes;
+package com.hhn.kite2server.commentlikes;
 
-import com.hhn.kite2server.account.comment.Comment;
-import com.hhn.kite2server.account.comment.CommentRepository;
-import com.hhn.kite2server.account.comment.CommentService;
+import com.hhn.kite2server.comment.Comment;
+import com.hhn.kite2server.comment.CommentService;
 import com.hhn.kite2server.appuser.AppUser;
 import com.hhn.kite2server.common.ResultCode;
 import com.hhn.kite2server.response.Response;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -83,12 +81,10 @@ public class CommentLikeService {
         return response;
     }
 
-    @Transactional
     public void deleteLikesByUser(AppUser user) {
         commentLikeRepository.deleteByUser(user);
     }
 
-    @Transactional
     public void deleteLikesByComment(Comment comment) {
         commentLikeRepository.deleteByComment(comment);
     }

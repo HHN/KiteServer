@@ -1,4 +1,4 @@
-package com.hhn.kite2server.account.comment.requests;
+package com.hhn.kite2server.comment.requests;
 
 import lombok.*;
 

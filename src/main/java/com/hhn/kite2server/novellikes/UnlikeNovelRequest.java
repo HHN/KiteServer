@@ -1,4 +1,4 @@
-package com.hhn.kite2server.account.comment.requests;
+package com.hhn.kite2server.novellikes;
 
 import lombok.*;
 
@@ -7,6 +7,6 @@ import lombok.*;
 @NoArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class DeleteCommentRequest {
+public class UnlikeNovelRequest {
     private Long id;
 }

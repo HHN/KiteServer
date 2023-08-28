@@ -46,7 +46,14 @@ public enum ResultCode {
     SUCCESSFULLY_UNLIKED_COMMENT,
     FAILED_TO_LIKE_COMMENT,
     FAILED_TO_UNLIKE_COMMENT,
-    COMMENT_LIKE_NOT_FOUND;
+    COMMENT_LIKE_NOT_FOUND,
+    SUCCESSFULLY_LIKED_NOVEL,
+    SUCCESSFULLY_UNLIKED_NOVEL,
+    FAILED_TO_LIKE_NOVEL,
+    FAILED_TO_UNLIKE_NOVEL,
+    NOVEL_LIKE_NOT_FOUND,
+    SUCCESSFULLY_GOT_NOVEL_LIKE_INFORMATION,
+    FAILED_TO_GET_NOVEL_LIKE_INFORMATION;
 
     public int toInt() {
         switch (this) {
@@ -95,6 +102,13 @@ public enum ResultCode {
             case FAILED_TO_LIKE_COMMENT             -> { return 43;}
             case FAILED_TO_UNLIKE_COMMENT           -> { return 44;}
             case COMMENT_LIKE_NOT_FOUND             -> { return 45;}
+            case SUCCESSFULLY_LIKED_NOVEL           -> { return 46;}
+            case SUCCESSFULLY_UNLIKED_NOVEL         -> { return 47;}
+            case FAILED_TO_LIKE_NOVEL               -> { return 48;}
+            case FAILED_TO_UNLIKE_NOVEL             -> { return 49;}
+            case NOVEL_LIKE_NOT_FOUND               -> { return 50;}
+            case SUCCESSFULLY_GOT_NOVEL_LIKE_INFORMATION    -> { return 51;}
+            case FAILED_TO_GET_NOVEL_LIKE_INFORMATION       -> { return 52;}
             default                                 -> { return -1;}
         }
     }
@@ -146,6 +160,13 @@ public enum ResultCode {
             case 43     -> { return FAILED_TO_LIKE_COMMENT; }
             case 44     -> { return FAILED_TO_UNLIKE_COMMENT; }
             case 45     -> { return COMMENT_LIKE_NOT_FOUND; }
+            case 46     -> { return SUCCESSFULLY_LIKED_NOVEL; }
+            case 47     -> { return SUCCESSFULLY_UNLIKED_NOVEL; }
+            case 48     -> { return FAILED_TO_LIKE_NOVEL; }
+            case 49     -> { return FAILED_TO_UNLIKE_NOVEL; }
+            case 50     -> { return NOVEL_LIKE_NOT_FOUND; }
+            case 51     -> { return SUCCESSFULLY_GOT_NOVEL_LIKE_INFORMATION; }
+            case 52     -> { return FAILED_TO_GET_NOVEL_LIKE_INFORMATION; }
             default     -> { return NONE; }
         }
     }

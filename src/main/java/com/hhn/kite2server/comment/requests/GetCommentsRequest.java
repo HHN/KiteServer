@@ -1,4 +1,4 @@
-package com.hhn.kite2server.account.comment.requests;
+package com.hhn.kite2server.comment.requests;
 
 import lombok.*;
 
@@ -7,7 +7,6 @@ import lombok.*;
 @NoArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class PostCommentRequest {
-    private String comment;
+public class GetCommentsRequest {
     private Long visualNovelId;
 }

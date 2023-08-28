@@ -1,4 +1,4 @@
-package com.hhn.kite2server.account.commentlikes;
+package com.hhn.kite2server.commentlikes;
 
 import com.hhn.kite2server.appuser.AppUser;
 import com.hhn.kite2server.response.Response;

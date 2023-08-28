@@ -1,0 +1,12 @@
+package com.hhn.kite2server.commentlikes;
+
+import lombok.*;
+
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor
+@EqualsAndHashCode
+@ToString
+public class LikeCommentRequest {
+    private Long id;
+}

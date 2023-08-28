@@ -1,4 +1,4 @@
-package com.hhn.kite2server.account.comment;
+package com.hhn.kite2server.comment;
 
 import lombok.EqualsAndHashCode;
 import lombok.Getter;

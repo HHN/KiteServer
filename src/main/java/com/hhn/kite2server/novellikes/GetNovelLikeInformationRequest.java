@@ -1,4 +1,4 @@
-package com.hhn.kite2server.account.commentlikes;
+package com.hhn.kite2server.novellikes;
 
 import lombok.*;
 
@@ -7,6 +7,6 @@ import lombok.*;
 @NoArgsConstructor
 @EqualsAndHashCode
 @ToString
-public class LikeCommentRequest {
+public class GetNovelLikeInformationRequest {
     private Long id;
 }

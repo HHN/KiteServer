@@ -1,4 +1,4 @@
-package com.hhn.kite2server.account.comment;
+package com.hhn.kite2server.comment;
 
 import com.hhn.kite2server.appuser.AppUser;
 import org.springframework.data.jpa.repository.JpaRepository;

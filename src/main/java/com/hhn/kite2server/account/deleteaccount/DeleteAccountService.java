@@ -1,13 +1,14 @@
 package com.hhn.kite2server.account.deleteaccount;
 
-import com.hhn.kite2server.account.comment.CommentService;
-import com.hhn.kite2server.account.commentlikes.CommentLikeService;
+import com.hhn.kite2server.comment.CommentService;
+import com.hhn.kite2server.commentlikes.CommentLikeService;
 import com.hhn.kite2server.account.resetpassword.ResetPasswordService;
 import com.hhn.kite2server.account.token.ConfirmationTokenService;
 import com.hhn.kite2server.appuser.AppUserRepository;
 import com.hhn.kite2server.common.ResultCode;
 import com.hhn.kite2server.appuser.AppUser;
 import com.hhn.kite2server.login.token.AuthenticationTokenRepository;
+import com.hhn.kite2server.novellikes.NovelLikeRepository;
 import com.hhn.kite2server.novels.VisualNovelService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ public class DeleteAccountService {
     private final AuthenticationTokenRepository tokenRepository;
     private final CommentService commentService;
     private final CommentLikeService commentLikeService;
+    private final NovelLikeRepository novelLikeRepository;
 
     public ResultCode delete(AppUser user) {
         if (!appUserRepository.existsById(user.getId())) {
@@ -33,6 +35,7 @@ public class DeleteAccountService {
         tokenRepository.deleteTokensFromUser(user.getId());
         novelService.deleteNovelsFromUser(user);
         commentService.deleteAllCommentsOfUser(user);
+        novelLikeRepository.deleteByUser(user);
         appUserRepository.deleteById(user.getId());
         return ResultCode.SUCCESSFULLY_DELETED_USER;
     }
