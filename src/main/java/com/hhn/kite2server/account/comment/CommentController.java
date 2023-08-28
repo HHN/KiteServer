@@ -4,6 +4,7 @@ import com.hhn.kite2server.account.comment.requests.ChangeCommentRequest;
 import com.hhn.kite2server.account.comment.requests.DeleteCommentRequest;
 import com.hhn.kite2server.account.comment.requests.GetCommentsRequest;
 import com.hhn.kite2server.account.comment.requests.PostCommentRequest;
+import com.hhn.kite2server.account.commentlikes.CommentLikeService;
 import com.hhn.kite2server.appuser.AppUser;
 import com.hhn.kite2server.common.ResultCode;
 import com.hhn.kite2server.response.Response;

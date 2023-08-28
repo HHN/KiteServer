@@ -4,6 +4,9 @@ import com.hhn.kite2server.account.comment.requests.ChangeCommentRequest;
 import com.hhn.kite2server.account.comment.requests.DeleteCommentRequest;
 import com.hhn.kite2server.account.comment.requests.GetCommentsRequest;
 import com.hhn.kite2server.account.comment.requests.PostCommentRequest;
+import com.hhn.kite2server.account.commentlikes.CommentLike;
+import com.hhn.kite2server.account.commentlikes.CommentLikeRepository;
+import com.hhn.kite2server.account.commentlikes.CommentLikeService;
 import com.hhn.kite2server.appuser.AppUser;
 import com.hhn.kite2server.common.ResultCode;
 import com.hhn.kite2server.novels.VisualNovel;
@@ -23,6 +26,7 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final VisualNovelRepository novelRepository;
+    private final CommentLikeRepository commentLikeRepository;
 
     public Response postComment(AppUser user, PostCommentRequest request) {
         Response response = new Response();
@@ -31,6 +35,7 @@ public class CommentService {
             ResultCode code = ResultCode.FAILED_TO_POST_COMMENT;
             response.setResultCode(code.toInt());
             response.setResultText(code.toString());
+            return response;
         }
         Optional<VisualNovel> optionalNovel = novelRepository.findById(request.getVisualNovelId());
 
@@ -38,6 +43,7 @@ public class CommentService {
             ResultCode code = ResultCode.NOVEL_NOT_FOUND;
             response.setResultCode(code.toInt());
             response.setResultText(code.toString());
+            return response;
         }
         Comment comment = new Comment();
         comment.setComment(request.getComment());
@@ -47,7 +53,7 @@ public class CommentService {
         ResultCode code = ResultCode.SUCCESSFULLY_POSTED_COMMENT;
         response.setResultCode(code.toInt());
         response.setResultText(code.toString());
-        SetComments(user.getUsername(), request.getVisualNovelId(), response);
+        SetComments(user, request.getVisualNovelId(), response);
         return response;
     }
 
@@ -68,18 +74,20 @@ public class CommentService {
             response.setResultText(code.toString());
             return response;
         }
-        String username = "";
-        if (user != null) { username = user.getUsername(); }
-        SetComments(username, request.getVisualNovelId(), response);
+        SetComments(user, request.getVisualNovelId(), response);
         ResultCode code = ResultCode.SUCCESSFULLY_GOT_COMMENTS_FOR_NOVEL;
         response.setResultCode(code.toInt());
         response.setResultText(code.toString());
         return response;
     }
 
-    private void SetComments(String username, Long visualNovelId, Response response) {
+    public void SetComments(AppUser user, Long visualNovelId, Response response) {
         List<Comment> commentList = commentRepository.findByVisualNovelId(visualNovelId);
         List<CommentInformation> responseList = new ArrayList<>();
+        String username = "";
+        if (user != null) {
+            username = user.getUsername();
+        }
 
         for (Comment comment : commentList) {
             CommentInformation commentInformation = new CommentInformation();
@@ -87,8 +95,14 @@ public class CommentService {
             commentInformation.setId(comment.getId());
             commentInformation.setAuthor(comment.getAuthor().getUsername());
             commentInformation.setIsOwnComment(username.equals(commentInformation.getAuthor()));
-            //Set liked
-            //Set like count
+
+            if (user != null) {
+                commentInformation.setLiked(commentLikeRepository.findByUserAndComment(user, comment).isPresent());
+            } else {
+                commentInformation.setLiked(false);
+            }
+            List<CommentLike> likes = commentLikeRepository.findByComment(comment);
+            commentInformation.setLikeCount((long) likes.size());
             responseList.add(commentInformation);
         }
         responseList.sort(Comparator.comparingLong(CommentInformation::getId));
@@ -124,7 +138,7 @@ public class CommentService {
         ResultCode code = ResultCode.SUCCESSFULLY_UPDATED_COMMENT;
         response.setResultCode(code.toInt());
         response.setResultText(code.toString());
-        SetComments(user.getUsername(), comment.getVisualNovelId(), response);
+        SetComments(user, comment.getVisualNovelId(), response);
         return response;
     }
 
@@ -153,11 +167,12 @@ public class CommentService {
         }
         Comment comment = optionalComment.get();
         long visualNovelId = comment.getVisualNovelId();
+        commentLikeRepository.deleteByComment(comment);
         commentRepository.delete(comment);
         ResultCode code = ResultCode.SUCCESSFULLY_DELETED_COMMENT;
         response.setResultCode(code.toInt());
         response.setResultText(code.toString());
-        SetComments(user.getUsername(), visualNovelId, response);
+        SetComments(user, visualNovelId, response);
         return response;
     }
 
@@ -167,5 +182,9 @@ public class CommentService {
 
     public void deleteAllCommentsOfVisualNovel(Long visualNovelId) {
         commentRepository.deleteByVisualNovelId(visualNovelId);
+    }
+
+    public Optional<Comment> findById(long id) {
+        return commentRepository.findById(id);
     }
 }
