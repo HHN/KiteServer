@@ -27,5 +27,4 @@ public interface AuthenticationTokenRepository extends JpaRepository<Authenticat
   delete from AuthenticationToken t where t.user.id = :id
   """)
     void deleteTokensFromUser(@Param("id") Long userId);
-
 }
