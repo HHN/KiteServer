@@ -29,6 +29,7 @@ public class AppUser implements UserDetails {
     @Enumerated(EnumType.STRING) private AppUserRole appUserRole;
     private Boolean locked = false;
     private Boolean enabled = false;
+    private Long score;
 
     public AppUser(String username, String password, String email, AppUserRole appUserRole) {
         this.username = username;

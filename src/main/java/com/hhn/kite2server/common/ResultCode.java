@@ -53,7 +53,11 @@ public enum ResultCode {
     FAILED_TO_UNLIKE_NOVEL,
     NOVEL_LIKE_NOT_FOUND,
     SUCCESSFULLY_GOT_NOVEL_LIKE_INFORMATION,
-    FAILED_TO_GET_NOVEL_LIKE_INFORMATION;
+    FAILED_TO_GET_NOVEL_LIKE_INFORMATION,
+    SUCCESSFULLY_GOT_SCORE,
+    FAILED_TO_GET_SCORE,
+    SUCCESSFULLY_UPDATED_SCORE,
+    FAILED_TO_UPDATE_SCORE;
 
     public int toInt() {
         switch (this) {
@@ -109,6 +113,10 @@ public enum ResultCode {
             case NOVEL_LIKE_NOT_FOUND               -> { return 50;}
             case SUCCESSFULLY_GOT_NOVEL_LIKE_INFORMATION    -> { return 51;}
             case FAILED_TO_GET_NOVEL_LIKE_INFORMATION       -> { return 52;}
+            case SUCCESSFULLY_GOT_SCORE             -> { return 53;}
+            case FAILED_TO_GET_SCORE                -> { return 54;}
+            case SUCCESSFULLY_UPDATED_SCORE         -> { return 55;}
+            case FAILED_TO_UPDATE_SCORE             -> { return 56;}
             default                                 -> { return -1;}
         }
     }
@@ -167,6 +175,10 @@ public enum ResultCode {
             case 50     -> { return NOVEL_LIKE_NOT_FOUND; }
             case 51     -> { return SUCCESSFULLY_GOT_NOVEL_LIKE_INFORMATION; }
             case 52     -> { return FAILED_TO_GET_NOVEL_LIKE_INFORMATION; }
+            case 53     -> { return SUCCESSFULLY_GOT_SCORE; }
+            case 54     -> { return FAILED_TO_GET_SCORE; }
+            case 55     -> { return SUCCESSFULLY_UPDATED_SCORE; }
+            case 56     -> { return FAILED_TO_UPDATE_SCORE; }
             default     -> { return NONE; }
         }
     }

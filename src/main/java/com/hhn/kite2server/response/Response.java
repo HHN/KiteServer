@@ -22,4 +22,5 @@ public class Response {
     public VisualNovel specifiedNovel;
     public int numberOfNovelLikes;
     public Boolean novelLikedByUser;
+    public long score;
 }

@@ -10,6 +10,7 @@ import com.hhn.kite2server.appuser.AppUser;
 import com.hhn.kite2server.login.token.AuthenticationTokenRepository;
 import com.hhn.kite2server.novellikes.NovelLikeRepository;
 import com.hhn.kite2server.novels.VisualNovelService;
+import com.hhn.kite2server.score.ScoreService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +25,7 @@ public class DeleteAccountService {
     private final CommentService commentService;
     private final CommentLikeService commentLikeService;
     private final NovelLikeRepository novelLikeRepository;
+    private final ScoreService scoreService;
 
     public ResultCode delete(AppUser user) {
         if (!appUserRepository.existsById(user.getId())) {
@@ -36,6 +38,7 @@ public class DeleteAccountService {
         novelService.deleteNovelsFromUser(user);
         commentService.deleteAllCommentsOfUser(user);
         novelLikeRepository.deleteByUser(user);
+        scoreService.deleteScoreByUser(user);
         appUserRepository.deleteById(user.getId());
         return ResultCode.SUCCESSFULLY_DELETED_USER;
     }

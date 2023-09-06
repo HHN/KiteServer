@@ -9,6 +9,8 @@ import com.hhn.kite2server.appuser.AppUserRole;
 import com.hhn.kite2server.email.EmailCreatorService;
 import com.hhn.kite2server.email.EmailSender;
 import com.hhn.kite2server.email.EmailValidator;
+import com.hhn.kite2server.score.Score;
+import com.hhn.kite2server.score.ScoreService;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,7 @@ public class RegistrationService {
     private final EmailValidator emailValidator;
     private final EmailSender emailSender;
     private final EmailCreatorService emailCreatorService;
+    private final ScoreService scoreService;
 
     public ResultCode register(RegistrationRequest request) {
         AppUser newUser = new AppUser(request.getUsername(), request.getPassword(), request.getEmail(),
@@ -51,6 +54,11 @@ public class RegistrationService {
         String encodedPassword = bCryptPasswordEncoder.encode(newUser.getPassword());
         newUser.setPassword(encodedPassword);
         appUserRepository.save(newUser);
+
+        Score newScore = new Score();
+        newScore.setValue(0L);
+        newScore.setUser((newUser));
+        scoreService.saveScore((newScore));
 
         String token = UUID.randomUUID().toString();
         ConfirmationToken confirmationToken =
