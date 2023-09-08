@@ -1,6 +1,7 @@
 package com.hhn.kite2server.score;
 
 import com.hhn.kite2server.appuser.AppUser;
+import com.hhn.kite2server.money.GetMoneyRequest;
 import com.hhn.kite2server.novelreadwrite.FindNovelRequest;
 import com.hhn.kite2server.response.Response;
 import lombok.AllArgsConstructor;
@@ -15,7 +16,7 @@ public class ScoreController {
     private final ScoreService scoreService;
 
     @GetMapping
-    public Response getScore(@AuthenticationPrincipal AppUser user, @RequestBody FindNovelRequest request) {
+    public Response getScore(@AuthenticationPrincipal AppUser user, @RequestBody GetScoreRequest request) {
         return scoreService.getScore(user, request);
     }
 

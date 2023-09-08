@@ -9,6 +9,8 @@ import com.hhn.kite2server.appuser.AppUserRole;
 import com.hhn.kite2server.email.EmailCreatorService;
 import com.hhn.kite2server.email.EmailSender;
 import com.hhn.kite2server.email.EmailValidator;
+import com.hhn.kite2server.money.Money;
+import com.hhn.kite2server.money.MoneyService;
 import com.hhn.kite2server.score.Score;
 import com.hhn.kite2server.score.ScoreService;
 import lombok.AllArgsConstructor;
@@ -29,6 +31,7 @@ public class RegistrationService {
     private final EmailSender emailSender;
     private final EmailCreatorService emailCreatorService;
     private final ScoreService scoreService;
+    private final MoneyService moneyService;
 
     public ResultCode register(RegistrationRequest request) {
         AppUser newUser = new AppUser(request.getUsername(), request.getPassword(), request.getEmail(),
@@ -59,6 +62,11 @@ public class RegistrationService {
         newScore.setValue(0L);
         newScore.setUser((newUser));
         scoreService.saveScore((newScore));
+
+        Money newMoney = new Money();
+        newMoney.setValue(5000L);
+        newMoney.setUser((newUser));
+        moneyService.saveMoney((newMoney));
 
         String token = UUID.randomUUID().toString();
         ConfirmationToken confirmationToken =

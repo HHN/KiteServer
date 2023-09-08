@@ -23,4 +23,5 @@ public class Response {
     public int numberOfNovelLikes;
     public Boolean novelLikedByUser;
     public long score;
+    public long money;
 }

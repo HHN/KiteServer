@@ -8,6 +8,7 @@ import com.hhn.kite2server.appuser.AppUserRepository;
 import com.hhn.kite2server.common.ResultCode;
 import com.hhn.kite2server.appuser.AppUser;
 import com.hhn.kite2server.login.token.AuthenticationTokenRepository;
+import com.hhn.kite2server.money.MoneyService;
 import com.hhn.kite2server.novellikes.NovelLikeRepository;
 import com.hhn.kite2server.novels.VisualNovelService;
 import com.hhn.kite2server.score.ScoreService;
@@ -26,6 +27,7 @@ public class DeleteAccountService {
     private final CommentLikeService commentLikeService;
     private final NovelLikeRepository novelLikeRepository;
     private final ScoreService scoreService;
+    private final MoneyService moneyService;
 
     public ResultCode delete(AppUser user) {
         if (!appUserRepository.existsById(user.getId())) {
@@ -39,6 +41,7 @@ public class DeleteAccountService {
         commentService.deleteAllCommentsOfUser(user);
         novelLikeRepository.deleteByUser(user);
         scoreService.deleteScoreByUser(user);
+        moneyService.deleteMoneyByUser(user);
         appUserRepository.deleteById(user.getId());
         return ResultCode.SUCCESSFULLY_DELETED_USER;
     }

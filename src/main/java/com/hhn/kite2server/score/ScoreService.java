@@ -15,7 +15,7 @@ public class ScoreService {
 
     private final ScoreRepository scoreRepository;
 
-    public Response getScore(AppUser user, FindNovelRequest request) {
+    public Response getScore(AppUser user, GetScoreRequest request) {
         Response response = new Response();
 
         if (user == null || request == null) {

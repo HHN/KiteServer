@@ -57,7 +57,11 @@ public enum ResultCode {
     SUCCESSFULLY_GOT_SCORE,
     FAILED_TO_GET_SCORE,
     SUCCESSFULLY_UPDATED_SCORE,
-    FAILED_TO_UPDATE_SCORE;
+    FAILED_TO_UPDATE_SCORE,
+    SUCCESSFULLY_GOT_MONEY,
+    FAILED_TO_GET_MONEY,
+    SUCCESSFULLY_UPDATED_MONEY,
+    FAILED_TO_UPDATE_MONEY;
 
     public int toInt() {
         switch (this) {
@@ -117,6 +121,10 @@ public enum ResultCode {
             case FAILED_TO_GET_SCORE                -> { return 54;}
             case SUCCESSFULLY_UPDATED_SCORE         -> { return 55;}
             case FAILED_TO_UPDATE_SCORE             -> { return 56;}
+            case SUCCESSFULLY_GOT_MONEY             -> { return 57;}
+            case FAILED_TO_GET_MONEY                -> { return 58;}
+            case SUCCESSFULLY_UPDATED_MONEY         -> { return 59;}
+            case FAILED_TO_UPDATE_MONEY             -> { return 60;}
             default                                 -> { return -1;}
         }
     }
@@ -179,6 +187,10 @@ public enum ResultCode {
             case 54     -> { return FAILED_TO_GET_SCORE; }
             case 55     -> { return SUCCESSFULLY_UPDATED_SCORE; }
             case 56     -> { return FAILED_TO_UPDATE_SCORE; }
+            case 57     -> { return SUCCESSFULLY_GOT_MONEY; }
+            case 58     -> { return FAILED_TO_GET_MONEY; }
+            case 59     -> { return SUCCESSFULLY_UPDATED_MONEY; }
+            case 60     -> { return FAILED_TO_UPDATE_MONEY; }
             default     -> { return NONE; }
         }
     }
