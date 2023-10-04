@@ -6,7 +6,7 @@ spring:
   datasource:
     password: password
     url: jdbc:postgresql://localhost:5432/registration?charSet=UTF8
-    username:
+    username: postgres
   jpa:
     hibernate:
       ddl-auto: create-drop

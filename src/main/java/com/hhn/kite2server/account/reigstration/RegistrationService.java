@@ -73,7 +73,7 @@ public class RegistrationService {
                 new ConfirmationToken(token, LocalDateTime.now(), LocalDateTime.now().plusDays(7), newUser);
         confirmationTokenService.saveConfirmationToken(confirmationToken);
 
-        String link = "http://localhost:8080/confirm/confirm?token=" + token;
+        String link = "http://85.215.46.25:8080/confirm/confirm?token=" + token;
         emailSender.send(newUser.getEmail(), emailCreatorService.buildEmailConfirmRegistrationAddress(link),
                 "Bestätige deine Email-Adresse");
 
