@@ -76,7 +76,7 @@ public class ResetPasswordService {
                 new ResetPasswordToken(token, LocalDateTime.now(), LocalDateTime.now().plusDays(7), appUser);
         resetPasswordConfirmationTokenRepository.save(confirmationToken);
 
-        String link = "http://localhost:8080/resetpassword/confirm?token=" + token;
+        String link = "http://85.215.46.25:8080/resetpassword/confirm?token=" + token;
         emailSender.send(appUser.getEmail(), emailCreatorService.buildEmailConfirmResetOfPassword(link), "Passwort Zurücksetzung");
         return ResultCode.SUCCESSFULLY_INITIATED_RESET;
     }

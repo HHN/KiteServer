@@ -43,6 +43,7 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/resetpassword/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/comment").permitAll()
                         .requestMatchers(HttpMethod.GET, "/novellike").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/privacy").permitAll()
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(daoAuthenticationProvider())

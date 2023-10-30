@@ -1,0 +1,2 @@
+Manifest-Version: 1.0
+Main-Class: com.hhn.kite2server.Kite2ServerApplication
