@@ -4,7 +4,7 @@ server:
     include-binding-errors: always
 spring:
   datasource:
-    password:
+    password: 41331422Ka&Pn
     url: jdbc:postgresql://localhost:5432/registration?charSet=UTF8
     username: postgres
   jpa:

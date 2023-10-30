@@ -14,7 +14,6 @@ public class Kite2ServerApplication {
     public static void main(String[] args) {
         try{
             SpringApplication.run(Kite2ServerApplication.class, args);
-            throw new Exception("Test Exception!");
         } catch (Exception e) {
             LoggerConfig loggerConfig = new LoggerConfig();
             loggerConfig.configureLogger();
