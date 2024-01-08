@@ -44,6 +44,8 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/comment").permitAll()
                         .requestMatchers(HttpMethod.GET, "/novellike").permitAll()
                         .requestMatchers(HttpMethod.GET, "/privacy").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/marketing").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/license").permitAll()
                         .anyRequest().authenticated()
                 )
                 .authenticationProvider(daoAuthenticationProvider())
