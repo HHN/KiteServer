@@ -1,7 +1,9 @@
 package com.hhn.kite2server.novelreview;
 
 import com.hhn.kite2server.common.ResultCode;
+import com.hhn.kite2server.email.EmailCreatorService;
 import com.hhn.kite2server.response.Response;
+import com.hhn.kite2server.reviewobserver.ReviewObserverService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,8 @@ import java.util.List;
 public class NovelReviewService {
 
     private final NovelReviewRepository novelReviewRepository;
+    private final EmailCreatorService emailCreatorService;
+    private final ReviewObserverService reviewObserverService;
 
     public Response getAllReviews() {
         Response response = new Response();
@@ -35,6 +39,11 @@ public class NovelReviewService {
         ResultCode code = ResultCode.SUCCESSFULLY_ADDED_NOVEL_REVIEW;
         response.setResultCode(code.toInt());
         response.setResultText(code.toString());
+
+        String email = emailCreatorService.buildEmailForNotificationAboutNovelReview(request.getNovelName(),
+                String.valueOf(request.getRating()), request.getReviewText());
+        reviewObserverService.SendEmailToAllObserversAboutNovelReview(email);
+
         return response;
     }
 

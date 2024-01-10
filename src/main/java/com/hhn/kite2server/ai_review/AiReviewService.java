@@ -1,7 +1,11 @@
 package com.hhn.kite2server.ai_review;
 
 import com.hhn.kite2server.common.ResultCode;
+import com.hhn.kite2server.email.EmailCreatorService;
+import com.hhn.kite2server.email.EmailSender;
 import com.hhn.kite2server.response.Response;
+import com.hhn.kite2server.reviewobserver.ReviewObserver;
+import com.hhn.kite2server.reviewobserver.ReviewObserverService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +16,8 @@ import java.util.List;
 public class AiReviewService {
 
     private final AiReviewRepository aiReviewRepository;
+    private final EmailCreatorService emailCreatorService;
+    private final ReviewObserverService reviewObserverService;
 
     public Response getAllReviews() {
         Response response = new Response();
@@ -36,6 +42,11 @@ public class AiReviewService {
         ResultCode code = ResultCode.SUCCESSFULLY_ADDED_AI_REVIEW;
         response.setResultCode(code.toInt());
         response.setResultText(code.toString());
+
+        String email = emailCreatorService.buildEmailForNotificationAboutAiReview(request.getNovelName(),
+                request.getPrompt(), request.getAiFeedback(), request.getReviewText());
+        reviewObserverService.SendEmailToAllObserversAboutAiReview(email);
+
         return response;
     }
 

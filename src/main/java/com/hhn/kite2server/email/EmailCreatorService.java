@@ -67,4 +67,45 @@ public class EmailCreatorService {
             return null;
         }
     }
+
+    public String buildEmailForNotificationAboutNovelReview(String novelName, String score, String reviewText) {
+        try {
+            InputStream inputStream = getClass().getResourceAsStream("/templates/novel_bewertungs_benachrichtigung_email.html");
+            if (inputStream == null) {
+                throw new FileNotFoundException("Resource not found: /templates/novel_bewertungs_benachrichtigung_email.html");
+            }
+
+            // Lesen Sie den Stream in einen String
+            String email = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+
+            email = email.replace("{visual_novel_name}", novelName);
+            email = email.replace("{rating_number}", score);
+            email = email.replace("{rating_text}", reviewText);
+            return email;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public String buildEmailForNotificationAboutAiReview(String novelName, String aiPrompt, String aiReview, String reviewText) {
+        try {
+            InputStream inputStream = getClass().getResourceAsStream("/templates/ai_bwertung_benachrichtigung_email.html");
+            if (inputStream == null) {
+                throw new FileNotFoundException("Resource not found: /templates/ai_bwertung_benachrichtigung_email.html");
+            }
+
+            // Lesen Sie den Stream in einen String
+            String email = new String(inputStream.readAllBytes(), StandardCharsets.UTF_8);
+
+            email = email.replace("{visual_novel_name}", novelName);
+            email = email.replace("{ai_prompt}", aiPrompt);
+            email = email.replace("{ai_review}", aiReview);
+            email = email.replace("{review_of_review}", reviewText);
+            return email;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

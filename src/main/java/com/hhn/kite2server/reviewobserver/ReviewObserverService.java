@@ -1,6 +1,7 @@
 package com.hhn.kite2server.reviewobserver;
 
 import com.hhn.kite2server.common.ResultCode;
+import com.hhn.kite2server.email.EmailSender;
 import com.hhn.kite2server.response.Response;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import java.util.List;
 public class ReviewObserverService {
 
     private final ReviewObserverRepository reviewObserverRepository;
+    private final EmailSender emailSender;
 
     public Response getAllReviewObservers() {
         Response response = new Response();
@@ -64,5 +66,27 @@ public class ReviewObserverService {
             return;
         }
         reviewObserverRepository.save(reviewObserver);
+    }
+
+    public void SendEmailToAllObserversAboutNovelReview(String email) {
+        List<ReviewObserver> reviewObservers = reviewObserverRepository.findAll();
+        if (reviewObservers.isEmpty() || email == null || email.isBlank()) {
+            return;
+        }
+
+        for (ReviewObserver observer : reviewObservers) {
+            emailSender.send(observer.getEmail(), email, "KITE II - Neue Novel Bewertung");
+        }
+    }
+
+    public void SendEmailToAllObserversAboutAiReview(String email) {
+        List<ReviewObserver> reviewObservers = reviewObserverRepository.findAll();
+        if (reviewObservers.isEmpty() || email == null || email.isBlank()) {
+            return;
+        }
+
+        for (ReviewObserver observer : reviewObservers) {
+            emailSender.send(observer.getEmail(), email, "KITE II - Neue KI Bewertung");
+        }
     }
 }
