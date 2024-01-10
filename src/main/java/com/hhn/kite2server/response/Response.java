@@ -1,5 +1,6 @@
 package com.hhn.kite2server.response;
 
+import com.hhn.kite2server.ai_review.AiReview;
 import com.hhn.kite2server.comment.CommentInformation;
 import com.hhn.kite2server.novelreview.NovelReview;
 import com.hhn.kite2server.novels.VisualNovel;
@@ -26,4 +27,5 @@ public class Response {
     public long score;
     public long money;
     private List<NovelReview> novelReviews;
+    private List<AiReview> aiReviews;
 }
