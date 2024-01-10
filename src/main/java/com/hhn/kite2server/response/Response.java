@@ -4,6 +4,7 @@ import com.hhn.kite2server.ai_review.AiReview;
 import com.hhn.kite2server.comment.CommentInformation;
 import com.hhn.kite2server.novelreview.NovelReview;
 import com.hhn.kite2server.novels.VisualNovel;
+import com.hhn.kite2server.reviewobserver.ReviewObserver;
 import lombok.*;
 
 import java.util.List;
@@ -28,4 +29,5 @@ public class Response {
     public long money;
     private List<NovelReview> novelReviews;
     private List<AiReview> aiReviews;
+    private List<ReviewObserver> reviewObservers;
 }

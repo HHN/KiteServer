@@ -69,7 +69,11 @@ public enum ResultCode {
     SUCCESSFULLY_GOT_ALL_AI_REVIEWS,
     SUCCESSFULLY_ADDED_AI_REVIEW,
     SUCCESSFULLY_DELETED_AI_REVIEW,
-    NO_SUCH_AI_REVIEW;
+    NO_SUCH_AI_REVIEW,
+    SUCCESSFULLY_GOT_ALL_REVIEW_OBSERVER,
+    SUCCESSFULLY_ADDED_REVIEW_OBSERVER,
+    SUCCESSFULLY_DELETED_REVIEW_OBSERVER,
+    NO_SUCH_REVIEW_OBSERVER;
 
     public int toInt() {
         switch (this) {
@@ -141,6 +145,10 @@ public enum ResultCode {
             case SUCCESSFULLY_ADDED_AI_REVIEW       -> { return 66;}
             case SUCCESSFULLY_DELETED_AI_REVIEW     -> { return 67;}
             case NO_SUCH_AI_REVIEW                  -> { return 68;}
+            case SUCCESSFULLY_GOT_ALL_REVIEW_OBSERVER    -> { return 69;}
+            case SUCCESSFULLY_ADDED_REVIEW_OBSERVER       -> { return 70;}
+            case SUCCESSFULLY_DELETED_REVIEW_OBSERVER     -> { return 71;}
+            case NO_SUCH_REVIEW_OBSERVER                  -> { return 72;}
             default                                 -> { return -1;}
         }
     }
@@ -215,6 +223,10 @@ public enum ResultCode {
             case 66     -> { return SUCCESSFULLY_ADDED_AI_REVIEW; }
             case 67     -> { return SUCCESSFULLY_DELETED_AI_REVIEW; }
             case 68     -> { return NO_SUCH_AI_REVIEW; }
+            case 69     -> { return SUCCESSFULLY_GOT_ALL_REVIEW_OBSERVER; }
+            case 70     -> { return SUCCESSFULLY_ADDED_REVIEW_OBSERVER; }
+            case 71     -> { return SUCCESSFULLY_DELETED_REVIEW_OBSERVER; }
+            case 72     -> { return NO_SUCH_REVIEW_OBSERVER; }
             default     -> { return NONE; }
         }
     }
