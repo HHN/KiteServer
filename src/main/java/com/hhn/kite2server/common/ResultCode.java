@@ -61,7 +61,11 @@ public enum ResultCode {
     SUCCESSFULLY_GOT_MONEY,
     FAILED_TO_GET_MONEY,
     SUCCESSFULLY_UPDATED_MONEY,
-    FAILED_TO_UPDATE_MONEY;
+    FAILED_TO_UPDATE_MONEY,
+    SUCCESSFULLY_GOT_ALL_NOVEL_REVIEWS,
+    SUCCESSFULLY_ADDED_NOVEL_REVIEW,
+    SUCCESSFULLY_DELETED_NOVEL_REVIEW,
+    NO_SUCH_NOVEL_REVIEW;
 
     public int toInt() {
         switch (this) {
@@ -125,6 +129,10 @@ public enum ResultCode {
             case FAILED_TO_GET_MONEY                -> { return 58;}
             case SUCCESSFULLY_UPDATED_MONEY         -> { return 59;}
             case FAILED_TO_UPDATE_MONEY             -> { return 60;}
+            case SUCCESSFULLY_GOT_ALL_NOVEL_REVIEWS -> { return 61;}
+            case SUCCESSFULLY_ADDED_NOVEL_REVIEW    -> { return 62;}
+            case SUCCESSFULLY_DELETED_NOVEL_REVIEW  -> { return 63;}
+            case NO_SUCH_NOVEL_REVIEW               -> { return 64;}
             default                                 -> { return -1;}
         }
     }
@@ -191,6 +199,10 @@ public enum ResultCode {
             case 58     -> { return FAILED_TO_GET_MONEY; }
             case 59     -> { return SUCCESSFULLY_UPDATED_MONEY; }
             case 60     -> { return FAILED_TO_UPDATE_MONEY; }
+            case 61     -> { return SUCCESSFULLY_GOT_ALL_NOVEL_REVIEWS; }
+            case 62     -> { return SUCCESSFULLY_ADDED_NOVEL_REVIEW; }
+            case 63     -> { return SUCCESSFULLY_DELETED_NOVEL_REVIEW; }
+            case 64     -> { return NO_SUCH_NOVEL_REVIEW; }
             default     -> { return NONE; }
         }
     }

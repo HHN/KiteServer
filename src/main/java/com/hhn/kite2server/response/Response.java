@@ -1,6 +1,7 @@
 package com.hhn.kite2server.response;
 
 import com.hhn.kite2server.comment.CommentInformation;
+import com.hhn.kite2server.novelreview.NovelReview;
 import com.hhn.kite2server.novels.VisualNovel;
 import lombok.*;
 
@@ -24,4 +25,5 @@ public class Response {
     public Boolean novelLikedByUser;
     public long score;
     public long money;
+    private List<NovelReview> novelReviews;
 }
