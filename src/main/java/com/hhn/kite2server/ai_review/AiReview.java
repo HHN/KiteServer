@@ -21,9 +21,12 @@ public class AiReview {
 
     private String novelName;
 
+    @Lob
     private String prompt;
 
+    @Lob
     private String aiFeedback;
 
+    @Lob
     private String reviewText;
 }

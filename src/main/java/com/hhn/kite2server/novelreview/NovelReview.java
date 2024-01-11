@@ -23,5 +23,6 @@ public class NovelReview {
 
     private Long rating;
 
+    @Lob
     private String reviewText;
 }
