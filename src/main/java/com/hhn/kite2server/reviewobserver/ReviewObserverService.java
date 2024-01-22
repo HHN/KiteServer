@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Service
@@ -26,6 +27,15 @@ public class ReviewObserverService {
     }
 
     public Response addReviewObserver(AddReviewObserverRequest request) {
+        Optional<ReviewObserver> existingObserver = reviewObserverRepository.findByEmail(request.getEmail());
+        if (existingObserver.isPresent()) {
+            Response response = new Response();
+            ResultCode code = ResultCode.REVIEW_OBSERVER_ALREADY_EXISTS;
+            response.setResultCode(code.toInt());
+            response.setResultText(code.toString());
+            return response;
+        }
+
         ReviewObserver reviewObserver = new ReviewObserver();
         reviewObserver.setEmail(request.getEmail());
         saveReviewObserver(reviewObserver);

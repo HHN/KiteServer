@@ -73,7 +73,8 @@ public enum ResultCode {
     SUCCESSFULLY_GOT_ALL_REVIEW_OBSERVER,
     SUCCESSFULLY_ADDED_REVIEW_OBSERVER,
     SUCCESSFULLY_DELETED_REVIEW_OBSERVER,
-    NO_SUCH_REVIEW_OBSERVER;
+    NO_SUCH_REVIEW_OBSERVER,
+    REVIEW_OBSERVER_ALREADY_EXISTS;
 
     public int toInt() {
         switch (this) {
@@ -149,6 +150,7 @@ public enum ResultCode {
             case SUCCESSFULLY_ADDED_REVIEW_OBSERVER       -> { return 70;}
             case SUCCESSFULLY_DELETED_REVIEW_OBSERVER     -> { return 71;}
             case NO_SUCH_REVIEW_OBSERVER                  -> { return 72;}
+            case REVIEW_OBSERVER_ALREADY_EXISTS           -> { return 73;}
             default                                 -> { return -1;}
         }
     }
@@ -227,6 +229,7 @@ public enum ResultCode {
             case 70     -> { return SUCCESSFULLY_ADDED_REVIEW_OBSERVER; }
             case 71     -> { return SUCCESSFULLY_DELETED_REVIEW_OBSERVER; }
             case 72     -> { return NO_SUCH_REVIEW_OBSERVER; }
+            case 73     -> { return REVIEW_OBSERVER_ALREADY_EXISTS; }
             default     -> { return NONE; }
         }
     }
