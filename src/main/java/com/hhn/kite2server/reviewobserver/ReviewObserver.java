@@ -8,8 +8,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@EqualsAndHashCode
 @NoArgsConstructor
+@EqualsAndHashCode
 @Entity
 public class ReviewObserver {
     @SequenceGenerator(name = "review_observer_sequence", sequenceName = "review_observer_sequence", allocationSize = 1)
