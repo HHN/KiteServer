@@ -1,6 +1,6 @@
 package com.hhn.kite2server.novelreview;
 
-import com.hhn.kite2server.common.ResultCode;
+import com.hhn.kite2server.response.ResultCode;
 import com.hhn.kite2server.email.EmailCreatorService;
 import com.hhn.kite2server.response.Response;
 import com.hhn.kite2server.reviewobserver.ReviewObserverService;

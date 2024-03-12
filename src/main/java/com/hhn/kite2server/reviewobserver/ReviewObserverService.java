@@ -1,6 +1,6 @@
 package com.hhn.kite2server.reviewobserver;
 
-import com.hhn.kite2server.common.ResultCode;
+import com.hhn.kite2server.response.ResultCode;
 import com.hhn.kite2server.email.EmailSender;
 import com.hhn.kite2server.response.Response;
 import lombok.AllArgsConstructor;
