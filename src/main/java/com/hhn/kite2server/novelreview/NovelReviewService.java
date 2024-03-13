@@ -64,7 +64,7 @@ public class NovelReviewService {
     }
 
     public boolean deleteReview(Long id) {
-        if (!novelReviewRepository.findById(id).isPresent()) {
+        if (novelReviewRepository.findById(id).isEmpty()) {
             return false;
         }
         novelReviewRepository.deleteById(id);

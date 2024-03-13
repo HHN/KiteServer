@@ -65,7 +65,7 @@ public class AiReviewService {
     }
 
     public boolean deleteReview(Long id) {
-        if (!aiReviewRepository.findById(id).isPresent()) {
+        if (aiReviewRepository.findById(id).isEmpty()) {
             return false;
         }
         aiReviewRepository.deleteById(id);

@@ -7,14 +7,16 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @AllArgsConstructor
 @Service
 public class EmailCreatorService {
+    private static final Logger logger = LoggerFactory.getLogger(EmailCreatorService.class);
 
     public String buildEmailForNotificationAboutNovelReview(String novelName, String score, String reviewText) {
-        try {
-            InputStream inputStream = getClass().getResourceAsStream("/templates/novel_bewertungs_benachrichtigung_email.html");
+        try (InputStream inputStream = getClass().getResourceAsStream("/templates/novel_bewertungs_benachrichtigung_email.html")) {
             if (inputStream == null) {
                 throw new FileNotFoundException("Resource not found: /templates/novel_bewertungs_benachrichtigung_email.html");
             }
@@ -27,14 +29,13 @@ public class EmailCreatorService {
             email = email.replace("{rating_text}", reviewText);
             return email;
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Error occured while building email for notification about novel review.", e);
             return null;
         }
     }
 
     public String buildEmailForNotificationAboutAiReview(String novelName, String aiPrompt, String aiReview, String reviewText) {
-        try {
-            InputStream inputStream = getClass().getResourceAsStream("/templates/ai_bwertung_benachrichtigung_email.html");
+        try (InputStream inputStream = getClass().getResourceAsStream("/templates/ai_bwertung_benachrichtigung_email.html")) {
             if (inputStream == null) {
                 throw new FileNotFoundException("Resource not found: /templates/ai_bwertung_benachrichtigung_email.html");
             }
@@ -48,7 +49,7 @@ public class EmailCreatorService {
             email = email.replace("{review_of_review}", reviewText);
             return email;
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Error occured while building email for notification about ai review.", e);
             return null;
         }
     }

@@ -1,7 +1,6 @@
 package com.hhn.kite2server.response;
 
 public enum ResultCode {
-    NONE,
     FAILURE,
     NOT_AUTHORIZED,
     SUCCESSFULLY_GOT_COMPLETION,
@@ -38,28 +37,6 @@ public enum ResultCode {
             case NO_SUCH_REVIEW_OBSERVER                    -> { return 15;}
             case REVIEW_OBSERVER_ALREADY_EXISTS             -> { return 16;}
             default                                         -> { return -1;}
-        }
-    }
-
-    public ResultCode valueOf(int i) {
-        switch (i) {
-            case 1      -> { return FAILURE; }
-            case 2      -> { return NOT_AUTHORIZED; }
-            case 3      -> { return SUCCESSFULLY_GOT_COMPLETION; }
-            case 4      -> { return SUCCESSFULLY_GOT_ALL_NOVEL_REVIEWS; }
-            case 5      -> { return SUCCESSFULLY_ADDED_NOVEL_REVIEW; }
-            case 6      -> { return SUCCESSFULLY_DELETED_NOVEL_REVIEW; }
-            case 7      -> { return NO_SUCH_NOVEL_REVIEW; }
-            case 8      -> { return SUCCESSFULLY_GOT_ALL_AI_REVIEWS; }
-            case 9      -> { return SUCCESSFULLY_ADDED_AI_REVIEW; }
-            case 10     -> { return SUCCESSFULLY_DELETED_AI_REVIEW; }
-            case 11     -> { return NO_SUCH_AI_REVIEW; }
-            case 12     -> { return SUCCESSFULLY_GOT_ALL_REVIEW_OBSERVER; }
-            case 13     -> { return SUCCESSFULLY_ADDED_REVIEW_OBSERVER; }
-            case 14     -> { return SUCCESSFULLY_DELETED_REVIEW_OBSERVER; }
-            case 15     -> { return NO_SUCH_REVIEW_OBSERVER; }
-            case 16     -> { return REVIEW_OBSERVER_ALREADY_EXISTS; }
-            default     -> { return NONE; }
         }
     }
 }

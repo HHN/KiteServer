@@ -64,7 +64,7 @@ public class ReviewObserverService {
     }
 
     public boolean deleteReviewObserver(Long id) {
-        if (!reviewObserverRepository.findById(id).isPresent()) {
+        if (reviewObserverRepository.findById(id).isEmpty()) {
             return false;
         }
         reviewObserverRepository.deleteById(id);
