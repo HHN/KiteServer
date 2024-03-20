@@ -17,7 +17,8 @@ public enum ResultCode {
     SUCCESSFULLY_DELETED_REVIEW_OBSERVER,
     NO_SUCH_REVIEW_OBSERVER,
     REVIEW_OBSERVER_ALREADY_EXISTS,
-    SUCCESSFULLY_GOT_VERSION;
+    SUCCESSFULLY_GOT_VERSION,
+    SUCCESSFULLY_GOT_USER_ROLE;
 
     public int toInt() {
         switch (this) {
@@ -38,6 +39,7 @@ public enum ResultCode {
             case NO_SUCH_REVIEW_OBSERVER                    -> { return 15;}
             case REVIEW_OBSERVER_ALREADY_EXISTS             -> { return 16;}
             case SUCCESSFULLY_GOT_VERSION                   -> { return 17;}
+            case SUCCESSFULLY_GOT_USER_ROLE                 -> { return 18;}
             default                                         -> { return -1;}
         }
     }
