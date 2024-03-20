@@ -27,6 +27,7 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/ai").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/version").permitAll()
 
                         .requestMatchers(HttpMethod.GET, "/novelreview").permitAll()
                         .requestMatchers(HttpMethod.POST, "/novelreview").permitAll()

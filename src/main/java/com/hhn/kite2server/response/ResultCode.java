@@ -16,19 +16,20 @@ public enum ResultCode {
     SUCCESSFULLY_ADDED_REVIEW_OBSERVER,
     SUCCESSFULLY_DELETED_REVIEW_OBSERVER,
     NO_SUCH_REVIEW_OBSERVER,
-    REVIEW_OBSERVER_ALREADY_EXISTS;
+    REVIEW_OBSERVER_ALREADY_EXISTS,
+    SUCCESSFULLY_GOT_VERSION;
 
     public int toInt() {
         switch (this) {
             case FAILURE                                    -> { return 1; }
-            case NOT_AUTHORIZED                             -> { return 2;}
-            case SUCCESSFULLY_GOT_COMPLETION                -> { return 3;}
-            case SUCCESSFULLY_GOT_ALL_NOVEL_REVIEWS         -> { return 4;}
-            case SUCCESSFULLY_ADDED_NOVEL_REVIEW            -> { return 5;}
-            case SUCCESSFULLY_DELETED_NOVEL_REVIEW          -> { return 6;}
-            case NO_SUCH_NOVEL_REVIEW                       -> { return 7;}
-            case SUCCESSFULLY_GOT_ALL_AI_REVIEWS            -> { return 8;}
-            case SUCCESSFULLY_ADDED_AI_REVIEW               -> { return 9;}
+            case NOT_AUTHORIZED                             -> { return 2; }
+            case SUCCESSFULLY_GOT_COMPLETION                -> { return 3; }
+            case SUCCESSFULLY_GOT_ALL_NOVEL_REVIEWS         -> { return 4; }
+            case SUCCESSFULLY_ADDED_NOVEL_REVIEW            -> { return 5; }
+            case SUCCESSFULLY_DELETED_NOVEL_REVIEW          -> { return 6; }
+            case NO_SUCH_NOVEL_REVIEW                       -> { return 7; }
+            case SUCCESSFULLY_GOT_ALL_AI_REVIEWS            -> { return 8; }
+            case SUCCESSFULLY_ADDED_AI_REVIEW               -> { return 9; }
             case SUCCESSFULLY_DELETED_AI_REVIEW             -> { return 10;}
             case NO_SUCH_AI_REVIEW                          -> { return 11;}
             case SUCCESSFULLY_GOT_ALL_REVIEW_OBSERVER       -> { return 12;}
@@ -36,6 +37,7 @@ public enum ResultCode {
             case SUCCESSFULLY_DELETED_REVIEW_OBSERVER       -> { return 14;}
             case NO_SUCH_REVIEW_OBSERVER                    -> { return 15;}
             case REVIEW_OBSERVER_ALREADY_EXISTS             -> { return 16;}
+            case SUCCESSFULLY_GOT_VERSION                   -> { return 17;}
             default                                         -> { return -1;}
         }
     }

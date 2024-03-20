@@ -19,4 +19,5 @@ public class Response {
     private List<NovelReview> novelReviews;
     private List<AiReview> aiReviews;
     private List<ReviewObserver> reviewObservers;
+    private int version;
 }
