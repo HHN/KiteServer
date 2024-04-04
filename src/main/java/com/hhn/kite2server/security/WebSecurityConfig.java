@@ -41,6 +41,11 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/reviewobserver").permitAll()
                         .requestMatchers(HttpMethod.POST, "/reviewobserver").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/reviewobserver").permitAll()
+
+                        .requestMatchers(HttpMethod.GET, "/data").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/data").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/data").permitAll()
+
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sessionManagement ->

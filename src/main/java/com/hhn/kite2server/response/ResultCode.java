@@ -18,7 +18,11 @@ public enum ResultCode {
     NO_SUCH_REVIEW_OBSERVER,
     REVIEW_OBSERVER_ALREADY_EXISTS,
     SUCCESSFULLY_GOT_VERSION,
-    SUCCESSFULLY_GOT_USER_ROLE;
+    SUCCESSFULLY_GOT_USER_ROLE,
+    SUCCESSFULLY_GOT_ALL_DATA_OBJECTS,
+    SUCCESSFULLY_ADDED_DATA_OBJECT,
+    SUCCESSFULLY_DELETED_DATA_OBJECT,
+    NO_SUCH_DATA_OBJECT;
 
     public int toInt() {
         switch (this) {
@@ -40,6 +44,10 @@ public enum ResultCode {
             case REVIEW_OBSERVER_ALREADY_EXISTS             -> { return 16;}
             case SUCCESSFULLY_GOT_VERSION                   -> { return 17;}
             case SUCCESSFULLY_GOT_USER_ROLE                 -> { return 18;}
+            case SUCCESSFULLY_GOT_ALL_DATA_OBJECTS          -> { return 19;}
+            case SUCCESSFULLY_ADDED_DATA_OBJECT             -> { return 20;}
+            case SUCCESSFULLY_DELETED_DATA_OBJECT           -> { return 21;}
+            case NO_SUCH_DATA_OBJECT                        -> { return 22;}
             default                                         -> { return -1;}
         }
     }
