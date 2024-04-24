@@ -46,6 +46,16 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/data").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/data").permitAll()
 
+                        .requestMatchers(HttpMethod.PUT, "/expertfeedbackquestion").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/expertfeedbackquestion").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/expertfeedbackquestion").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/expertfeedbackquestion").permitAll()
+
+                        .requestMatchers(HttpMethod.PUT, "/expertfeedbackanswer").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/expertfeedbackanswer").permitAll()
+                        .requestMatchers(HttpMethod.DELETE, "/expertfeedbackanswer").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/expertfeedbackanswer").permitAll()
+
                         .anyRequest().authenticated()
                 )
                 .sessionManagement(sessionManagement ->
