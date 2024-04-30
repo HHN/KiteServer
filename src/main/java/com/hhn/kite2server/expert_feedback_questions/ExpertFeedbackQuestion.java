@@ -37,7 +37,7 @@ public class ExpertFeedbackQuestion {
     @Lob
     private String expertFeedbackQuestion;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     @JoinColumn(name = "expert_feedback_answer_id", referencedColumnName = "id")
     private ExpertFeedbackAnswer expertFeedbackAnswer;
 }
