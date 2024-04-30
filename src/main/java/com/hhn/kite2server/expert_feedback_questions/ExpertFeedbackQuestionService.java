@@ -5,6 +5,7 @@ import com.hhn.kite2server.response.Response;
 import com.hhn.kite2server.response.ResultCode;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,6 +16,7 @@ public class ExpertFeedbackQuestionService {
 
     private final ExpertFeedbackQuestionRepository expertFeedbackQuestionRepository;
 
+    @Transactional
     public Response findExpertFeedbackQuestion(FindExpertFeedbackQuestionRequest request) {
         Response response = new Response();
 

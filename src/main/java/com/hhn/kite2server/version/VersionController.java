@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class VersionController {
 
-    private static int VERSION = 4;
+    private static int VERSION = 5;
 
     @GetMapping
     public Response getVersion() {
