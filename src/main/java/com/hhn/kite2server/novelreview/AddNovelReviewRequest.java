@@ -12,4 +12,36 @@ public class AddNovelReviewRequest {
     private String novelName;
     private Long rating;
     private String reviewText;
+
+    public Long getNovelId() {
+        return novelId;
+    }
+
+    public void setNovelId(Long novelId) {
+        this.novelId = novelId;
+    }
+
+    public String getNovelName() {
+        return novelName;
+    }
+
+    public void setNovelName(String novelName) {
+        this.novelName = novelName;
+    }
+
+    public Long getRating() {
+        return rating;
+    }
+
+    public void setRating(Long rating) {
+        this.rating = rating;
+    }
+
+    public String getReviewText() {
+        return reviewText;
+    }
+
+    public void setReviewText(String reviewText) {
+        this.reviewText = reviewText;
+    }
 }

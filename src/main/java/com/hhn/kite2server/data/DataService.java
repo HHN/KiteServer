@@ -1,6 +1,5 @@
 package com.hhn.kite2server.data;
 
-import com.hhn.kite2server.ai_review.AiReview;
 import com.hhn.kite2server.response.Response;
 import com.hhn.kite2server.response.ResultCode;
 import lombok.AllArgsConstructor;

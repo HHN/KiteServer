@@ -25,4 +25,44 @@ public class NovelReview {
 
     @Lob
     private String reviewText;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getNovelId() {
+        return novelId;
+    }
+
+    public void setNovelId(Long novelId) {
+        this.novelId = novelId;
+    }
+
+    public String getNovelName() {
+        return novelName;
+    }
+
+    public void setNovelName(String novelName) {
+        this.novelName = novelName;
+    }
+
+    public Long getRating() {
+        return rating;
+    }
+
+    public void setRating(Long rating) {
+        this.rating = rating;
+    }
+
+    public String getReviewText() {
+        return reviewText;
+    }
+
+    public void setReviewText(String reviewText) {
+        this.reviewText = reviewText;
+    }
 }

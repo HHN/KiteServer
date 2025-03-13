@@ -35,6 +35,7 @@ public enum ResultCode {
     SUCCESSFULLY_GOT_ALL_EXPERT_FEEDBACK_ANSWERS;
 
     public int toInt() {
+        System.out.println("Resultcode: " + this);
         switch (this) {
             case FAILURE                                        -> { return 1; }
             case NOT_AUTHORIZED                                 -> { return 2; }

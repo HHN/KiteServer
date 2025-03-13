@@ -10,4 +10,12 @@ import lombok.*;
 @NoArgsConstructor
 public class FindExpertFeedbackQuestionRequest {
     private String userUuid;
+
+    public String getUserUuid() {
+        return userUuid;
+    }
+
+    public void setUserUuid(String userUuid) {
+        this.userUuid = userUuid;
+    }
 }

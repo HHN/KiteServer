@@ -19,6 +19,7 @@ public class GptController {
 
     @PostMapping
     public Response getCompletion(@RequestBody GptRequest request) {
+        System.out.println("request = " + request);
         Response response = new Response();
         String completion = gptService.getCompletion(request.getPrompt());
 

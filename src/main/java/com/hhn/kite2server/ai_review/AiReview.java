@@ -29,4 +29,52 @@ public class AiReview {
 
     @Lob
     private String reviewText;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Long getNovelId() {
+        return novelId;
+    }
+
+    public void setNovelId(Long novelId) {
+        this.novelId = novelId;
+    }
+
+    public String getNovelName() {
+        return novelName;
+    }
+
+    public void setNovelName(String novelName) {
+        this.novelName = novelName;
+    }
+
+    public String getPrompt() {
+        return prompt;
+    }
+
+    public void setPrompt(String prompt) {
+        this.prompt = prompt;
+    }
+
+    public String getAiFeedback() {
+        return aiFeedback;
+    }
+
+    public void setAiFeedback(String aiFeedback) {
+        this.aiFeedback = aiFeedback;
+    }
+
+    public String getReviewText() {
+        return reviewText;
+    }
+
+    public void setReviewText(String reviewText) {
+        this.reviewText = reviewText;
+    }
 }
