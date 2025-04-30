@@ -1,54 +1,33 @@
-2025-03-13T16:50:34.211+01:00  INFO 29764 --- [main] c.h.kite2server.Kite2ServerApplication   : Starting Kite2ServerApplication using Java 17.0.11 with PID 29764 (C:\Users\JL\Documents\Code\Kite2Server\target\classes started by JL in C:\Users\JL\Documents\Code\Kite2Server)
-2025-03-13T16:50:34.219+01:00  INFO 29764 --- [main] c.h.kite2server.Kite2ServerApplication   : No active profile set, falling back to 1 default profile: "default"
-2025-03-13T16:50:34.802+01:00  WARN 29764 --- [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.beans.factory.support.BeanDefinitionOverrideException: Invalid bean definition with name 'filterChain' defined in class path resource [com/hhn/kite2server/security/WebSecurityConfig.class]: Cannot register bean definition [Root bean: class [null]; scope=; abstract=false; lazyInit=null; autowireMode=3; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=webSecurityConfig; factoryMethodName=filterChain; initMethodNames=null; destroyMethodNames=[(inferred)]; defined in class path resource [com/hhn/kite2server/security/WebSecurityConfig.class]] for bean 'filterChain' since there is already [Root bean: class [null]; scope=; abstract=false; lazyInit=null; autowireMode=3; dependencyCheck=0; autowireCandidate=true; primary=false; factoryBeanName=securityConfig; factoryMethodName=filterChain; initMethodNames=null; destroyMethodNames=[(inferred)]; defined in class path resource [com/hhn/kite2server/security/SecurityConfig.class]] bound.
-2025-03-13T16:50:34.811+01:00  INFO 29764 --- [main] .s.b.a.l.ConditionEvaluationReportLogger : 
-
-Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
-2025-03-13T16:50:34.824+01:00 ERROR 29764 --- [main] o.s.b.d.LoggingFailureAnalysisReporter   : 
-
-***************************
-APPLICATION FAILED TO START
-***************************
-
-Description:
-
-The bean 'filterChain', defined in class path resource [com/hhn/kite2server/security/WebSecurityConfig.class], could not be registered. A bean with that name has already been defined in class path resource [com/hhn/kite2server/security/SecurityConfig.class] and overriding is disabled.
-
-Action:
-
-Consider renaming one of the beans or enabling overriding by setting spring.main.allow-bean-definition-overriding=true
-
-2025-03-13T16:57:40.399+01:00  INFO 11300 --- [main] c.h.kite2server.Kite2ServerApplication   : Starting Kite2ServerApplication using Java 17.0.11 with PID 11300 (C:\Users\JL\Documents\Code\Kite2Server\target\classes started by JL in C:\Users\JL\Documents\Code\Kite2Server)
-2025-03-13T16:57:40.401+01:00  INFO 11300 --- [main] c.h.kite2server.Kite2ServerApplication   : No active profile set, falling back to 1 default profile: "default"
-2025-03-13T16:57:40.928+01:00  INFO 11300 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
-2025-03-13T16:57:40.977+01:00  INFO 11300 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 42 ms. Found 6 JPA repository interfaces.
-2025-03-13T16:57:41.802+01:00  INFO 11300 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
-2025-03-13T16:57:41.811+01:00  INFO 11300 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
-2025-03-13T16:57:41.811+01:00  INFO 11300 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.8]
-2025-03-13T16:57:41.891+01:00  INFO 11300 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
-2025-03-13T16:57:41.891+01:00  INFO 11300 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1442 ms
-2025-03-13T16:57:42.015+01:00 DEBUG 11300 --- [main] o.s.w.f.ServerHttpObservationFilter      : Filter 'webMvcObservationFilter' configured for use
-2025-03-13T16:57:42.117+01:00  INFO 11300 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
-2025-03-13T16:57:42.162+01:00  INFO 11300 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.2.2.Final
-2025-03-13T16:57:42.164+01:00  INFO 11300 --- [main] org.hibernate.cfg.Environment            : HHH000406: Using bytecode reflection optimizer
-2025-03-13T16:57:42.299+01:00  INFO 11300 --- [main] o.h.b.i.BytecodeProviderInitiator        : HHH000021: Bytecode provider name : bytebuddy
-2025-03-13T16:57:42.401+01:00  INFO 11300 --- [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
-2025-03-13T16:57:42.416+01:00  INFO 11300 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
-2025-03-13T16:57:42.714+01:00  INFO 11300 --- [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@31b6b0c7
-2025-03-13T16:57:42.715+01:00  INFO 11300 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
-2025-03-13T16:57:42.756+01:00  INFO 11300 --- [main] org.hibernate.orm.dialect                : HHH035001: Using dialect: org.hibernate.dialect.PostgreSQLDialect, version: org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator$DialectResolutionInfoImpl@5ee6fdc4
-2025-03-13T16:57:42.955+01:00  INFO 11300 --- [main] o.h.b.i.BytecodeProviderInitiator        : HHH000021: Bytecode provider name : bytebuddy
-2025-03-13T16:57:43.483+01:00  INFO 11300 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
-2025-03-13T16:57:43.575+01:00  INFO 11300 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
-2025-03-13T16:57:43.968+01:00  WARN 11300 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
-2025-03-13T16:57:44.190+01:00 DEBUG 11300 --- [main] s.w.s.m.m.a.RequestMappingHandlerMapping : 26 mappings in 'requestMappingHandlerMapping'
-2025-03-13T16:57:44.256+01:00 DEBUG 11300 --- [main] o.s.w.s.handler.SimpleUrlHandlerMapping  : Patterns [/webjars/**, /**] in 'resourceHandlerMapping'
-2025-03-13T16:57:44.368+01:00  INFO 11300 --- [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 14 endpoint(s) beneath base path '/actuator'
-2025-03-13T16:57:44.401+01:00  INFO 11300 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@1ae2028d, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@259ae1a9, org.springframework.security.web.context.SecurityContextHolderFilter@65a01901, org.springframework.security.web.header.HeaderWriterFilter@1503f434, org.springframework.security.web.authentication.logout.LogoutFilter@48b1b469, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@513ddf5f, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@77e64a46, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@1b89debc, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@d082916, org.springframework.security.web.session.SessionManagementFilter@3618486e, org.springframework.security.web.access.ExceptionTranslationFilter@2c6553c6, org.springframework.security.web.access.intercept.AuthorizationFilter@35bb3fea]
-2025-03-13T16:57:44.442+01:00 DEBUG 11300 --- [main] s.w.s.m.m.a.RequestMappingHandlerAdapter : ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
-2025-03-13T16:57:44.473+01:00 DEBUG 11300 --- [main] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 0 @ExceptionHandler, 1 ResponseBodyAdvice
-2025-03-13T16:57:44.618+01:00  INFO 11300 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
-2025-03-13T16:57:44.629+01:00  INFO 11300 --- [main] c.h.kite2server.Kite2ServerApplication   : Started Kite2ServerApplication in 4.613 seconds (process running for 4.937)
-2025-03-13T16:58:52.236+01:00  INFO 11300 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
-2025-03-13T16:58:52.238+01:00  INFO 11300 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
-2025-03-13T16:58:52.241+01:00  INFO 11300 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2025-03-18T12:28:52.592+01:00  INFO 34232 --- [main] c.h.kite2server.Kite2ServerApplication   : Starting Kite2ServerApplication using Java 17.0.11 with PID 34232 (C:\Users\JL\Documents\Code\Kite2Server\target\classes started by JL in C:\Users\JL\Documents\Code\Kite2Server)
+2025-03-18T12:28:52.598+01:00  INFO 34232 --- [main] c.h.kite2server.Kite2ServerApplication   : No active profile set, falling back to 1 default profile: "default"
+2025-03-18T12:28:53.541+01:00  INFO 34232 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2025-03-18T12:28:53.598+01:00  INFO 34232 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 49 ms. Found 6 JPA repository interfaces.
+2025-03-18T12:28:54.503+01:00  INFO 34232 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2025-03-18T12:28:54.514+01:00  INFO 34232 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2025-03-18T12:28:54.515+01:00  INFO 34232 --- [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/10.1.8]
+2025-03-18T12:28:54.609+01:00  INFO 34232 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2025-03-18T12:28:54.610+01:00  INFO 34232 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1963 ms
+2025-03-18T12:28:54.742+01:00 DEBUG 34232 --- [main] o.s.w.f.ServerHttpObservationFilter      : Filter 'webMvcObservationFilter' configured for use
+2025-03-18T12:28:54.858+01:00  INFO 34232 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2025-03-18T12:28:54.918+01:00  INFO 34232 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.2.2.Final
+2025-03-18T12:28:54.920+01:00  INFO 34232 --- [main] org.hibernate.cfg.Environment            : HHH000406: Using bytecode reflection optimizer
+2025-03-18T12:28:55.071+01:00  INFO 34232 --- [main] o.h.b.i.BytecodeProviderInitiator        : HHH000021: Bytecode provider name : bytebuddy
+2025-03-18T12:28:55.184+01:00  INFO 34232 --- [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2025-03-18T12:28:55.198+01:00  INFO 34232 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2025-03-18T12:28:55.404+01:00  INFO 34232 --- [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@f10d055
+2025-03-18T12:28:55.406+01:00  INFO 34232 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2025-03-18T12:28:55.449+01:00  INFO 34232 --- [main] org.hibernate.orm.dialect                : HHH035001: Using dialect: org.hibernate.dialect.PostgreSQLDialect, version: org.hibernate.engine.jdbc.env.internal.JdbcEnvironmentInitiator$DialectResolutionInfoImpl@4df0d9f8
+2025-03-18T12:28:55.662+01:00  INFO 34232 --- [main] o.h.b.i.BytecodeProviderInitiator        : HHH000021: Bytecode provider name : bytebuddy
+2025-03-18T12:28:56.233+01:00  INFO 34232 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2025-03-18T12:28:56.321+01:00  INFO 34232 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2025-03-18T12:28:56.753+01:00  WARN 34232 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2025-03-18T12:28:56.821+01:00 DEBUG 34232 --- [main] s.w.s.m.m.a.RequestMappingHandlerMapping : 26 mappings in 'requestMappingHandlerMapping'
+2025-03-18T12:28:56.859+01:00 DEBUG 34232 --- [main] s.w.s.m.m.a.RequestMappingHandlerAdapter : ControllerAdvice beans: 0 @ModelAttribute, 0 @InitBinder, 1 RequestBodyAdvice, 1 ResponseBodyAdvice
+2025-03-18T12:28:56.888+01:00 DEBUG 34232 --- [main] .m.m.a.ExceptionHandlerExceptionResolver : ControllerAdvice beans: 0 @ExceptionHandler, 1 ResponseBodyAdvice
+2025-03-18T12:28:57.198+01:00  INFO 34232 --- [main] o.s.b.a.e.web.EndpointLinksResolver      : Exposing 14 endpoint(s) beneath base path '/actuator'
+2025-03-18T12:28:57.234+01:00  INFO 34232 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.session.DisableEncodeUrlFilter@657e7e8, org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1b4ade78, org.springframework.security.web.context.SecurityContextHolderFilter@4884350b, org.springframework.security.web.header.HeaderWriterFilter@6ddc9001, org.springframework.security.web.authentication.logout.LogoutFilter@24f8707c, org.springframework.security.web.authentication.www.BasicAuthenticationFilter@408bb173, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@66ad7167, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@7ec5d3e1, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@45fa7fb7, org.springframework.security.web.session.SessionManagementFilter@2c56e044, org.springframework.security.web.access.ExceptionTranslationFilter@d082916, org.springframework.security.web.access.intercept.AuthorizationFilter@4bca2a09]
+2025-03-18T12:28:57.434+01:00  INFO 34232 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2025-03-18T12:28:57.446+01:00  INFO 34232 --- [main] c.h.kite2server.Kite2ServerApplication   : Started Kite2ServerApplication in 5.261 seconds (process running for 6.312)
+2025-03-18T12:28:59.733+01:00  INFO 34232 --- [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2025-03-18T12:28:59.735+01:00  INFO 34232 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2025-03-18T12:28:59.738+01:00  INFO 34232 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
