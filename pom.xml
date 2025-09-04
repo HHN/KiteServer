@@ -82,12 +82,13 @@
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>logging-interceptor</artifactId>
-            <version>5.0.0-alpha.11</version>
+            <version>4.11.0</version>
         </dependency>
 
     </dependencies>
 
     <build>
+        <finalName>Kite2Server</finalName>
         <plugins>
             <plugin>
                 <!-- Build an executable JAR -->
