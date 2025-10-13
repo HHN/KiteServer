@@ -68,3 +68,9 @@ openai:
   temperature: ${OPENAI_TEMPERATURE:0.5}
   max-tokens: ${OPENAI_MAX_TOKENS:2000}
 
+
+
+security:
+  api:
+    username: ${API_USERNAME:KiteRoot}
+    password: ${API_PASSWORD:ChangeMe123!}

@@ -4,10 +4,9 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hhn.kite2server.response.ResultCode;
 import com.hhn.kite2server.response.Response;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -20,11 +19,18 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 
 @Configuration
-@AllArgsConstructor
 public class WebSecurityConfig {
+
+    private final String apiUsername;
+    private final String apiPassword;
+
+    public WebSecurityConfig(@Value("${security.api.username}") String apiUsername,
+                             @Value("${security.api.password}") String apiPassword) {
+        this.apiUsername = apiUsername;
+        this.apiPassword = apiPassword;
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -33,35 +39,7 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 // Endpunkte konfigurieren:
                 .authorizeHttpRequests(auth -> auth
-                        // Endpunkte, die uneingeschränkt erreichbar sein sollen
-                        .requestMatchers(HttpMethod.POST, "/ai").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/version").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/role").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/actuator/mappings").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/novelreview").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/novelreview").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/novelreview").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/aireview").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/aireview").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/aireview").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/reviewobserver").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/reviewobserver").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/reviewobserver").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/data").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/data").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/data").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/expertfeedbackquestion").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/expertfeedbackquestion").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/expertfeedbackquestion").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/expertfeedbackquestion").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/expertfeedbackanswer").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/expertfeedbackanswer").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/expertfeedbackanswer").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/expertfeedbackanswer").permitAll()
-                        // Speziell passwortgeschützt: /data/export
-                        .requestMatchers("/data/export").authenticated()
-                        // Alle anderen Endpunkte
-                        .anyRequest().permitAll()
+                        .anyRequest().authenticated()
                 )
                 // HTTP Basic Authentication aktivieren
                 .httpBasic(Customizer.withDefaults())
@@ -72,7 +50,7 @@ public class WebSecurityConfig {
                 .exceptionHandling(exceptionHandling ->
                         exceptionHandling.authenticationEntryPoint((request, response, e) -> {
                             response.setContentType("application/json;charset=UTF-8");
-                            response.setStatus(HttpServletResponse.SC_OK);
+                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                             Response customResponse = new Response();
                             customResponse.setResultText(ResultCode.NOT_AUTHORIZED.toString());
                             customResponse.setResultCode(ResultCode.NOT_AUTHORIZED.toInt());
@@ -98,8 +76,8 @@ public class WebSecurityConfig {
     @Bean
     public UserDetailsService users(PasswordEncoder passwordEncoder) {
         return new InMemoryUserDetailsManager(
-                User.withUsername("KiteRoot")
-                        .password(passwordEncoder.encode("REDACTED_PASSWORD"))
+                User.withUsername(apiUsername)
+                        .password(passwordEncoder.encode(apiPassword))
                         .roles("USER")
                         .build()
         );
