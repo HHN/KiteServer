@@ -53,22 +53,10 @@ public enum ResultCode {
             case SUCCESSFULLY_DELETED_REVIEW_OBSERVER           -> { return 14;}
             case NO_SUCH_REVIEW_OBSERVER                        -> { return 15;}
             case REVIEW_OBSERVER_ALREADY_EXISTS                 -> { return 16;}
-            case SUCCESSFULLY_GOT_VERSION                       -> { return 17;}
-            case SUCCESSFULLY_GOT_USER_ROLE                     -> { return 18;}
             case SUCCESSFULLY_GOT_ALL_DATA_OBJECTS              -> { return 19;}
             case SUCCESSFULLY_ADDED_DATA_OBJECT                 -> { return 20;}
             case SUCCESSFULLY_DELETED_DATA_OBJECT               -> { return 21;}
             case NO_SUCH_DATA_OBJECT                            -> { return 22;}
-            case SUCCESSFULLY_POSTET_EXPERT_FEEDBACK_QUESTION   -> { return 23;}
-            case SUCCESSFULLY_DELETED_EXPERT_FEEDBACK_QUESTION  -> { return 24;}
-            case SUCCESSFULLY_FOUND_EXPERT_FEEDBACK_QUESTION    -> { return 25;}
-            case NO_SUCH_EXPERT_FEEDBACK_QUESTION               -> { return 26;}
-            case SUCCESSFULLY_POSTET_EXPERT_FEEDBACK_ANSWER     -> { return 27;}
-            case SUCCESSFULLY_DELETED_EXPERT_FEEDBACK_ANSWER    -> { return 28;}
-            case SUCCESSFULLY_FOUND_EXPERT_FEEDBACK_ANSWER      -> { return 29;}
-            case NO_SUCH_EXPERT_FEEDBACK_ANSWER                 -> { return 30;}
-            case SUCCESSFULLY_GOT_ALL_EXPERT_FEEDBACK_QUESTIONS -> { return 31;}
-            case SUCCESSFULLY_GOT_ALL_EXPERT_FEEDBACK_ANSWERS   -> { return 32;}
             default                                             -> { return -1;}
         }
     }
