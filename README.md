@@ -1,6 +1,6 @@
 ## Kite2Server
 
-Kite2Server ist ein Spring Boot (Java) Backend-Projekt mit REST-APIs für Reviews, Datenverwaltung, E-Mail-Versand und GPT-Integration.
+Kite2Server ist ein Spring Boot (Java) Backend-Projekt mit REST-APIs für Datenverwaltung und GPT-Integration.
 
 Kurzüberblick
 - Java: 17
