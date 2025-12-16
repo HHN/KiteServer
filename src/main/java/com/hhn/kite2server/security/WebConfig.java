@@ -12,7 +12,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")   // Gilt für alle Endpunkte deines Backends
-                .allowedOrigins("https://floriandiller.github.io", "https://kite.pages.it.hs-heilbronn.de")
+                .allowedOrigins("https://hhn.github.io", "https://kite.pages.it.hs-heilbronn.de")
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
                 .allowCredentials(true);
