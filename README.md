@@ -61,9 +61,7 @@ Wichtig: Die im Repository vorhandenen Beispielpasswörter sind Platzhalter. Nie
 
 ## Wichtige Module / Controller
 Das Projekt ist in Pakete unter `com.hhn.kite2server` strukturiert. Wichtige Subpakete und Controller (nicht vollständig):
-- `ai_review` — `AiReviewController`, `AiReviewService`, `AiReviewRepository`
 - `data` — `DataController`, `DataService`, `DataRepository`
-- `novelreview` — `NovelReviewController`, `NovelReviewService`
 - `gpt` — `GptController`, `GptService`, `GptConfig`
 - `email` — Services für E-Mail-Erzeugung und Versand
 - `expert_feedback_*` — Endpunkte für Experten-Feedback (Fragen & Antworten)

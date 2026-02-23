@@ -31,23 +31,6 @@ spring:
         connection:
           charSet: UTF-8
     show-sql: true
-  mail:
-    host: "mail.gmx.net"
-    port: 587
-    username: "mergos123@gmx.de"
-    password: "123456789abc1!!!!"
-    protocol: "smtp"
-    properties:
-      mail:
-        smtp:
-          ssl:
-            trust: "*"
-          auth: true
-          starttls:
-            enable: true
-          connectiontimeout: 15000
-          timeout: 3000
-          writetimeout: 15000
 logging:
   level:
     root: INFO
