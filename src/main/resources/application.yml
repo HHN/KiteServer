@@ -57,3 +57,19 @@ security:
   api:
     username: ${API_USERNAME:KiteRoot}
     password: ${API_PASSWORD:ChangeMe123!}
+
+bucket4j:
+  enabled: true
+  filters:
+    - cache-name: buckets
+      filter-method: auto
+      filter-order: 1
+      url: /metrics/(playthroughs/hit|scenes/.*/hit)
+      strategy: first
+      rate-limits:
+        - expression: "getRemoteAddr()"
+          bandwidths:
+            - capacity: 30
+              time: 1
+              unit: minutes
+              refill-strategy: greedy
