@@ -73,3 +73,15 @@ bucket4j:
               time: 1
               unit: minutes
               refill-strategy: greedy
+    - cache-name: buckets # Regel 2 für die KI
+      filter-order: 2
+      url: /ai
+      http-methods:
+        - POST
+      rate-limits:
+        - expression: "getRemoteAddr()"
+          bandwidths:
+            - capacity: 5
+              time: 10
+              unit: minutes
+              refill-strategy: greedy
