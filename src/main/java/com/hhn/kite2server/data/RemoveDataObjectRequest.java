@@ -2,6 +2,7 @@ package com.hhn.kite2server.data;
 
 import lombok.*;
 
+@Setter
 @Getter
 @AllArgsConstructor
 @EqualsAndHashCode
@@ -10,11 +11,4 @@ import lombok.*;
 public class RemoveDataObjectRequest {
     private long id;
 
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
 }

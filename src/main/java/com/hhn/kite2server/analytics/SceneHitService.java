@@ -36,7 +36,6 @@ public class SceneHitService {
         }
     }
 
-
     // READS: read-only, ohne Sperren
     @Transactional(readOnly = true)
     public long getCount(SceneType scene) {

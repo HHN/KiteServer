@@ -12,19 +12,4 @@ public class AddDataObjectRequest {
     private String prompt;
     private String completion;
 
-    public String getPrompt() {
-        return prompt;
-    }
-
-    public void setPrompt(String prompt) {
-        this.prompt = prompt;
-    }
-
-    public String getCompletion() {
-        return completion;
-    }
-
-    public void setCompletion(String completion) {
-        this.completion = completion;
-    }
 }

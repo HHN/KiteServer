@@ -1,4 +1,5 @@
 package com.hhn.kite2server.security;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hhn.kite2server.response.ResultCode;
 import com.hhn.kite2server.response.Response;
@@ -19,13 +20,23 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.HttpStatusEntryPoint;
+
 @Configuration
 @AllArgsConstructor
 public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
+                // 1. CORS konfigurieren (Dein recherchierter Basis-Schutz)
+                .cors(cors -> cors.configurationSource(request -> {
+                    var config = new org.springframework.web.cors.CorsConfiguration();
+                    config.setAllowedOrigins(java.util.List.of("https://hhn.github.io", "https://kite.pages.it.hs-heilbronn.de"));
+                    config.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+                    config.setAllowedHeaders(java.util.List.of("*"));
+                    config.setAllowCredentials(true);
+                    return config;
+                }))
+
                 // CSRF deaktivieren (für APIs oft sinnvoll, aber prüfe deine Anforderungen)
                 .csrf(AbstractHttpConfigurer::disable)
                 // Endpunkte konfigurieren:
@@ -40,12 +51,12 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/data").permitAll()
                         .requestMatchers(HttpMethod.POST, "/metrics/scenes/*/hit").permitAll()
                         .requestMatchers(HttpMethod.POST, "/metrics/playthroughs/hit").permitAll()
-                        .requestMatchers(HttpMethod.GET,  "/metrics/playthroughs").authenticated()
-                        .requestMatchers(HttpMethod.GET,  "/metrics/scenes").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/metrics/playthroughs").authenticated()
+                        .requestMatchers(HttpMethod.GET, "/metrics/scenes").authenticated()
                         .requestMatchers(HttpMethod.POST, "/metrics/reset-all").authenticated()
                         .requestMatchers("/data/export").authenticated()
                         // Alle anderen Endpunkte
-                        .anyRequest().permitAll()
+                        .anyRequest().authenticated()
                 )
                 // HTTP Basic Authentication aktivieren
                 .httpBasic(Customizer.withDefaults())
@@ -65,21 +76,28 @@ public class WebSecurityConfig {
                 );
         return http.build();
     }
+
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
     }
+
     // Definiert den sicheren PasswordEncoder (BCrypt)
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
     // Beispiel: In-Memory-Benutzerverwaltung mit verschlüsseltem Passwort
     @Bean
     public UserDetailsService users(PasswordEncoder passwordEncoder) {
+        // Hole Werte aus Umgebungsvariablen (System oder .env Datei)
+        String adminUser = System.getenv("ADMIN_USERNAME");
+        String adminPass = System.getenv("ADMIN_PASSWORD");
+
         return new InMemoryUserDetailsManager(
-                User.withUsername("KiteRoot")
-                        .password(passwordEncoder.encode("REDACTED_PASSWORD"))
+                User.withUsername(adminUser != null ? adminUser : "KiteRoot")
+                        .password(passwordEncoder.encode(adminPass != null ? adminPass : "fallback-geheim"))
                         .roles("USER")
                         .build()
         );

@@ -11,10 +11,9 @@ public enum SceneType {
 
     private final String wireName;
 
-    SceneType(String wireName) { this.wireName = wireName; }
-
-    @JsonValue
-    public String toValue() { return wireName; }
+    SceneType(String wireName) {
+        this.wireName = wireName;
+    }
 
     @JsonCreator
     public static SceneType fromValue(String value) {
@@ -22,5 +21,10 @@ public enum SceneType {
             if (t.wireName.equalsIgnoreCase(value)) return t;
         }
         throw new IllegalArgumentException("Unbekannte Szene: " + value);
+    }
+
+    @JsonValue
+    public String toValue() {
+        return wireName;
     }
 }

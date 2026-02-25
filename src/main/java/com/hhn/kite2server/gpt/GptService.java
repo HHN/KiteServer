@@ -87,7 +87,7 @@ public class GptService {
             // Erfolgsfall: "choices[0].message.content" (Fallback auf "text", falls vorhanden)
             JSONObject json = new JSONObject(respString);
             JSONArray choices = json.optJSONArray("choices");
-            if (choices == null || choices.length() == 0) {
+            if (choices == null || choices.isEmpty()) {
                 logger.error("Antwort ohne 'choices': {}", respString);
                 return error("Unerwartete Antwortstruktur der OpenAI API (kein 'choices').");
             }
