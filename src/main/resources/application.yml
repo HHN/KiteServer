@@ -55,8 +55,8 @@ openai:
 
 security:
   api:
-    username: ${API_USERNAME:KiteRoot}
-    password: ${API_PASSWORD:ChangeMe123!}
+    username: ${ADMIN_USERNAME}
+    password: ${ADMIN_PASSWORD}
 
 bucket4j:
   enabled: true

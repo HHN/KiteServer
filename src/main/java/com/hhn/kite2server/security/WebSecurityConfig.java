@@ -5,6 +5,7 @@ import com.hhn.kite2server.response.ResultCode;
 import com.hhn.kite2server.response.Response;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -22,8 +23,8 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-@AllArgsConstructor
 public class WebSecurityConfig {
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -90,14 +91,14 @@ public class WebSecurityConfig {
 
     // Beispiel: In-Memory-Benutzerverwaltung mit verschlüsseltem Passwort
     @Bean
-    public UserDetailsService users(PasswordEncoder passwordEncoder) {
-        // Hole Werte aus Umgebungsvariablen (System oder .env Datei)
-        String adminUser = System.getenv("ADMIN_USERNAME");
-        String adminPass = System.getenv("ADMIN_PASSWORD");
+    public UserDetailsService users(
+            PasswordEncoder passwordEncoder,
+            @Value("${security.api.username:KiteRoot}") String user,
+            @Value("${security.api.password:fallback-geheim}") String pass) {
 
         return new InMemoryUserDetailsManager(
-                User.withUsername(adminUser != null ? adminUser : "KiteRoot")
-                        .password(passwordEncoder.encode(adminPass != null ? adminPass : "fallback-geheim"))
+                User.withUsername(user)
+                        .password(passwordEncoder.encode(pass))
                         .roles("USER")
                         .build()
         );
