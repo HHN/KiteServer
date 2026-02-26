@@ -5,10 +5,7 @@ server:
   port: 8080
   ssl:
     enabled: false
-   # key-alias: kite2
-   # key-store: classpath:keystore/keystore.p12
-   # key-store-type: PKCS12
-   # key-store-password: REDACTED_PASSWORD
+
   tomcat:
     accesslog:
       enabled: true
@@ -16,12 +13,14 @@ server:
       prefix: access_log
       suffix: .log
       file-date-format: .yyyy-MM-dd
+
 spring:
   datasource:
     password: password
     url: jdbc:postgresql://localhost:5432/registration?charSet=UTF8
     username: postgres
   jpa:
+    open-in-view: false
     hibernate:
       ddl-auto: update
     properties:
@@ -31,6 +30,7 @@ spring:
         connection:
           charSet: UTF-8
     show-sql: true
+
 logging:
   level:
     root: INFO

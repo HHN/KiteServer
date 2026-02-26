@@ -18,7 +18,7 @@ public class DataExportController {
     @GetMapping("/data/export")
     public void exportData(HttpServletResponse response) throws IOException {
         // Setze den Content-Type und den Header, damit der Browser den Download startet
-        response.setContentType("text/csv");
+        response.setContentType("text/csv; charset=UTF-8");
         response.setHeader("Content-Disposition", "attachment; filename=\"data_objects.csv\"");
 
         // Alle DataObjects abrufen
@@ -30,23 +30,24 @@ public class DataExportController {
 
         // CSV-Datenzeilen
         for (DataObject data : dataObjects) {
-            writer.write(String.format("%d,\"%s\",\"%s\",%s\n",
-                    data.getId(),
-                    escapeCsv(data.getPrompt()),
-                    escapeCsv(data.getCompletion()),
-                    data.getCreatedAt() != null ? data.getCreatedAt().toString() : ""
-            ));
+            writer.append(String.valueOf(data.getId() != null ? data.getId() : ""))
+                    .append(',')
+                    .append(toCsvField(data.getPrompt()))
+                    .append(',')
+                    .append(toCsvField(data.getCompletion()))
+                    .append(',')
+                    .append(toCsvField(data.getCreatedAt() != null ? data.getCreatedAt().toString() : ""))
+                    .append('\n');
         }
 
         writer.flush();
     }
 
-    // Hilfsmethode zum Escapen von CSV-sensitiven Zeichen
-    private String escapeCsv(String value) {
-        if (value == null) {
-            return "";
-        }
-        // Ersetze doppelte Anführungszeichen und setze das Feld in Anführungszeichen
-        return value.replace("\"", "\"\"");
+    // RFC4180-ish: Quote nur wenn nötig, Quotes verdoppeln
+    private String toCsvField(String value) {
+        if (value == null) return "";
+        boolean mustQuote = value.contains(",") || value.contains("\"") || value.contains("\n") || value.contains("\r");
+        String escaped = value.replace("\"", "\"\"");
+        return mustQuote ? "\"" + escaped + "\"" : escaped;
     }
 }

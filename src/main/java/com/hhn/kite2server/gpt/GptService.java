@@ -42,14 +42,17 @@ public class GptService {
     @Value("${openai.temperature:0.5}")
     private double temperature;
 
+    private final OkHttpClient client = buildHttpClient();
+
     public String getCompletion(String prompt) {
         try {
             if (openaiApiKey == null || openaiApiKey.isBlank()) {
                 logger.error("OPENAI API Key fehlt – bitte in .env / Env-Var setzen (openai.api.key / OPENAI_API_KEY).");
                 return error("Konfiguration: OPENAI_API_KEY fehlt.");
             }
-
-            OkHttpClient client = buildHttpClient();
+            if (prompt == null || prompt.isBlank()) {
+                return error("Prompt ist leer.");
+            }
 
             JSONObject jsonBody = new JSONObject()
                     .put("model", model)
@@ -123,13 +126,16 @@ public class GptService {
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
                 .connectTimeout(5, TimeUnit.MINUTES)
                 .readTimeout(5, TimeUnit.MINUTES)
-                .writeTimeout(5, TimeUnit.MINUTES);
+                .writeTimeout(5, TimeUnit.MINUTES)
+                .callTimeout(120, TimeUnit.SECONDS);
 
         // Optionales HTTP-Logging (DEBUG-Level). Achtung: große Responses & sensible Daten!
-        HttpLoggingInterceptor logging = new HttpLoggingInterceptor(msg -> logger.debug("OKHTTP {}", msg));
-        logging.redactHeader("Authorization");
-        logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-        builder.addInterceptor(logging);
+        if (logger.isDebugEnabled()) {
+            HttpLoggingInterceptor logging = new HttpLoggingInterceptor(msg -> logger.debug("OKHTTP {}", msg));
+            logging.redactHeader("Authorization");
+            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
+            builder.addInterceptor(logging);
+        }
 
         return builder.build();
     }
