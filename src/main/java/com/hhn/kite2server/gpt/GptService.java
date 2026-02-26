@@ -124,9 +124,9 @@ public class GptService {
 
     private OkHttpClient buildHttpClient() {
         OkHttpClient.Builder builder = new OkHttpClient.Builder()
-                .connectTimeout(5, TimeUnit.MINUTES)
-                .readTimeout(5, TimeUnit.MINUTES)
-                .writeTimeout(5, TimeUnit.MINUTES)
+                .connectTimeout(20, TimeUnit.SECONDS)
+                .readTimeout(90, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
                 .callTimeout(120, TimeUnit.SECONDS);
 
         // Optionales HTTP-Logging (DEBUG-Level). Achtung: große Responses & sensible Daten!
