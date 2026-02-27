@@ -45,6 +45,7 @@ management:
         include: "*"
 
 openai:
+  enabled: true   # kill-switch: set to false to block outbound OpenAI calls immediately
   api:
     key: ${OPENAI_API_KEY}         # kommt aus .env
   model: ${OPENAI_MODEL:gpt-4o}    # Fallback, falls nicht in .env

@@ -42,10 +42,18 @@ public class GptService {
     @Value("${openai.temperature:0.5}")
     private double temperature;
 
+    @Value("${openai.enabled:true}")
+    private boolean openaiEnabled;
+
     private final OkHttpClient client = buildHttpClient();
 
     public String getCompletion(String prompt) {
         try {
+            if (!openaiEnabled) {
+                logger.warn("OpenAI outbound calls are disabled via kill-switch (openai.enabled=false).");
+                return error("Dienst vorübergehend deaktiviert.");
+            }
+
             if (openaiApiKey == null || openaiApiKey.isBlank()) {
                 logger.error("OPENAI API Key fehlt – bitte in .env / Env-Var setzen (openai.api.key / OPENAI_API_KEY).");
                 return error("Konfiguration: OPENAI_API_KEY fehlt.");
@@ -152,6 +160,6 @@ public class GptService {
 
     private String error(String msg) {
         // Einfaches JSON-Fehlerformat; ggf. an deinen Controller/Client anpassen
-        return "{\"error\":\"" + msg.replace("\"", "\\\"") + "\"}";
+        return new JSONObject().put("error", msg).toString();
     }
 }

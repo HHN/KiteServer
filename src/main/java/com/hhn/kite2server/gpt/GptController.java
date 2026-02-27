@@ -22,7 +22,9 @@ public class GptController {
         Response response = new Response();
         String completion = gptService.getCompletion(request.getPrompt());
 
-        if (Objects.equals(completion, "")) {
+        boolean isErrorPayload = completion != null && completion.startsWith("{\"error\"");
+        if (completion == null || completion.isBlank() || isErrorPayload) {
+            response.setCompletion(completion);
             response.setResultCode(ResultCode.FAILURE.toInt());
             response.setResultText(ResultCode.FAILURE.toString());
             return response;
