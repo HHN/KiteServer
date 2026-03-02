@@ -11,4 +11,6 @@ import lombok.*;
 public class GptRequest {
     private String prompt;
 
+    // Honeypot-Field, to detect bots (should be left empty by real users)
+    private String verification;
 }

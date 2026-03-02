@@ -2,6 +2,7 @@ package com.hhn.kite2server.gpt;
 
 import com.hhn.kite2server.data.AddDataObjectRequest;
 import com.hhn.kite2server.data.DataService;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
@@ -17,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
 @RequiredArgsConstructor
@@ -47,6 +49,7 @@ public class GptService {
 
     private final OkHttpClient client = buildHttpClient();
 
+    @CircuitBreaker(name = "openai", fallbackMethod = "fallbackGetCompletion")
     public String getCompletion(String prompt) {
         try {
             if (!openaiEnabled) {
@@ -92,7 +95,8 @@ public class GptService {
                 // Fehlermeldung extrahieren (falls vorhanden)
                 String apiMsg = extractErrorMessage(respString);
                 logger.error("OpenAI call failed: HTTP {} - {}", status, apiMsg != null ? apiMsg : respString);
-                return error(String.format("OpenAI-Fehler (HTTP %d): %s", status, apiMsg != null ? apiMsg : "siehe Server-Logs"));
+                // IMPORTANT: Throw an exception so that the circuit breaker counts the error!
+                throw new IOException(String.format("OpenAI-Fehler (HTTP %d): %s", status, apiMsg != null ? apiMsg : "siehe Server-Logs"));
             }
 
             // Erfolgsfall: "choices[0].message.content" (Fallback auf "text", falls vorhanden)
@@ -100,7 +104,7 @@ public class GptService {
             JSONArray choices = json.optJSONArray("choices");
             if (choices == null || choices.isEmpty()) {
                 logger.error("Antwort ohne 'choices': {}", respString);
-                return error("Unerwartete Antwortstruktur der OpenAI API (kein 'choices').");
+                throw new IOException("Unerwartete Antwortstruktur der OpenAI API (kein 'choices' in der Antwort).");
             }
 
             JSONObject choice0 = choices.getJSONObject(0);
@@ -113,7 +117,7 @@ public class GptService {
             }
             if (completion == null || completion.isBlank()) {
                 logger.error("Konnte keine Completion extrahieren: {}", respString);
-                return error("Konnte keine Antwort aus der API-Antwort extrahieren.");
+                throw new IOException("Konnte keine Antwort aus der API-Antwort extrahieren.");
             }
 
             // Persistieren
@@ -126,8 +130,17 @@ public class GptService {
 
         } catch (Exception e) {
             logger.error("Error occurred while getting completion.", e);
-            return error("Interner Fehler beim OpenAI-Aufruf (siehe Logs).");
+            // Throw exception so that the circuit breaker triggers.
+            // The fallback method then catches this for the user.
+            throw new RuntimeException(e);
         }
+    }
+
+    // This method is called when the circuit breaker is OPEN (automatic kill switch)
+    // or when an exception has been thrown.
+    public String fallbackGetCompletion(String prompt, Throwable t) {
+        logger.warn("Fallback ausgelöst (Circuit Breaker oder Fehler): {}", t.getMessage());
+        return error("Der KI-Dienst ist derzeit aufgrund hoher Last oder technischer Probleme kurzzeitig nicht verfügbar. Bitte versuchen Sie es in ein paar Minuten erneut.");
     }
 
     private OkHttpClient buildHttpClient() {

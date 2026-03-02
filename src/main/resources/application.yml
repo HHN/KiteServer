@@ -52,7 +52,16 @@ openai:
   temperature: ${OPENAI_TEMPERATURE:0.5}
   max-tokens: ${OPENAI_MAX_TOKENS:2000}
 
-
+resilience4j:
+  circuitbreaker:
+    instances:
+      openai:
+        registerHealthIndicator: true
+        slidingWindowSize: 10        # View the last 10 requests
+        failureRateThreshold: 50     # If 50% of them fail, kill switch ON
+        waitDurationInOpenState: 2m  # Wait 2 minutes before we automatically try again
+        permittedNumberOfCallsInHalfOpenState: 3 # Allow 3 test requests during restart
+        automaticTransitionFromOpenToHalfOpenEnabled: true
 
 security:
   api:
