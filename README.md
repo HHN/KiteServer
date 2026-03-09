@@ -63,8 +63,6 @@ Wichtig: Die im Repository vorhandenen Beispielpasswörter sind Platzhalter. Nie
 Das Projekt ist in Pakete unter `com.hhn.kite2server` strukturiert. Wichtige Subpakete und Controller (nicht vollständig):
 - `data` — `DataController`, `DataService`, `DataRepository`
 - `gpt` — `GptController`, `GptService`, `GptConfig`
-- `email` — Services für E-Mail-Erzeugung und Versand
-- `expert_feedback_*` — Endpunkte für Experten-Feedback (Fragen & Antworten)
 
 Die Hauptklasse ist `com.hhn.kite2server.Kite2ServerApplication`.
 
@@ -86,7 +84,7 @@ Die Hauptklasse ist `com.hhn.kite2server.Kite2ServerApplication`.
 - Unit- und Integrationstests lassen sich mit `./mvnw test` bzw. `mvnw.cmd test` ausführen.
 
 ## Lizenz
-Keine Lizenzdatei im Repository. Falls nötig, bitte eine passende Lizenz (z. B. MIT/Apache-2.0) hinzufügen.
+MIT-Lizenz
 
 ## Kontakt
 Bei Fragen: Repository-Maintainer oder Projektverantwortliche im Projekt kontaktieren.
