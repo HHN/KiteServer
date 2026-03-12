@@ -21,6 +21,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+import java.util.Arrays;
 
 @Configuration
 public class WebSecurityConfig {
@@ -31,9 +36,20 @@ public class WebSecurityConfig {
                 // 1. CORS konfigurieren (Dein recherchierter Basis-Schutz)
                 .cors(cors -> cors.configurationSource(request -> {
                     var config = new org.springframework.web.cors.CorsConfiguration();
-                    config.setAllowedOrigins(java.util.List.of("https://hhn.github.io", "https://kite.pages.it.hs-heilbronn.de"));
+
+                    config.setAllowedOrigins(java.util.List.of(
+                            "https://hhn.github.io",
+                            "https://kite.pages.it.hs-heilbronn.de",
+                            "https://kite-app.de/"));
+
                     config.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-                    config.setAllowedHeaders(java.util.List.of("*"));
+
+                    config.setAllowedHeaders(java.util.List.of(
+                            "Content-Type",
+                            "X-Kite-Passphrase", // Unser neuer Sicherheits-Header
+                            "Authorization"
+                    ));
+
                     config.setAllowCredentials(true);
                     return config;
                 }))

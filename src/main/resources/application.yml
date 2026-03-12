@@ -1,3 +1,8 @@
+app:
+  internal:
+    api:
+      key: ${APP_INTERNAL_API_KEY}
+
 server:
   error:
     include-message: always
@@ -52,15 +57,20 @@ openai:
   temperature: ${OPENAI_TEMPERATURE:0.5}
   max-tokens: ${OPENAI_MAX_TOKENS:2000}
 
+# Resilience4j Circuit Breaker Configuration:
+# This mechanism protects the application from cascading failures. 
+# It monitors the last 10 requests and "opens" the circuit (stops calls to OpenAI) 
+# if the failure rate reaches 50%. After a 2-minute wait, it attempts recovery 
+# by allowing 3 trial calls (half-open state).
 resilience4j:
   circuitbreaker:
     instances:
       openai:
         registerHealthIndicator: true
-        slidingWindowSize: 10        # View the last 10 requests
-        failureRateThreshold: 50     # If 50% of them fail, kill switch ON
-        waitDurationInOpenState: 2m  # Wait 2 minutes before we automatically try again
-        permittedNumberOfCallsInHalfOpenState: 3 # Allow 3 test requests during restart
+        slidingWindowSize: 10
+        failureRateThreshold: 50
+        waitDurationInOpenState: 2m
+        permittedNumberOfCallsInHalfOpenState: 3
         automaticTransitionFromOpenToHalfOpenEnabled: true
 
 security:
@@ -68,6 +78,13 @@ security:
     username: ${ADMIN_USERNAME}
     password: ${ADMIN_PASSWORD}
 
+# Bucket4j Rate Limiting Configuration:
+# This setup protects your API endpoints from abuse and brute-force attacks.
+# It uses two different filters:
+# 1. Metrics Filter: Limits requests to /metrics endpoints to 30 per minute per IP address.
+# 2. AI Filter: A stricter limit for /ai POST requests, allowing only 5 attempts per 10 minutes, 
+# tracked by a combination of IP address and Session ID.
+# The 'greedy' refill strategy ensures tokens are restored gradually over time.
 bucket4j:
   enabled: true
   filters:
