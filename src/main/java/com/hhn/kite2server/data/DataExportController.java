@@ -46,6 +46,13 @@ public class DataExportController {
     // RFC4180-ish: Quote nur wenn nötig, Quotes verdoppeln
     private String toCsvField(String value) {
         if (value == null) return "";
+
+        // Schutz vor "Formula Injection" (Excel führt Zellen, die mit =, +, -, @ beginnen, als Formel aus)
+        // Wir setzen ein einfaches Anführungszeichen davor, damit Excel es als Text behandelt.
+        if (value.startsWith("=") || value.startsWith("+") || value.startsWith("-") || value.startsWith("@")) {
+            value = "'" + value;
+        }
+
         boolean mustQuote = value.contains(",") || value.contains("\"") || value.contains("\n") || value.contains("\r");
         String escaped = value.replace("\"", "\"\"");
         return mustQuote ? "\"" + escaped + "\"" : escaped;

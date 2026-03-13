@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hhn.kite2server.response.ResultCode;
 import com.hhn.kite2server.response.Response;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,37 +21,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 public class WebSecurityConfig {
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, ObjectMapper objectMapper) throws Exception {
         http
-                // 1. CORS konfigurieren (Dein recherchierter Basis-Schutz)
-                .cors(cors -> cors.configurationSource(request -> {
-                    var config = new org.springframework.web.cors.CorsConfiguration();
-
-                    config.setAllowedOrigins(java.util.List.of(
-                            "https://hhn.github.io",
-                            "https://kite.pages.it.hs-heilbronn.de",
-                            "https://kite-app.de/"));
-
-                    config.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-
-                    config.setAllowedHeaders(java.util.List.of(
-                            "Content-Type",
-                            "X-Kite-Passphrase", // Unser neuer Sicherheits-Header
-                            "Authorization"
-                    ));
-
-                    config.setAllowCredentials(true);
-                    return config;
-                }))
+                // 1. CORS konfigurieren
+                .cors(Customizer.withDefaults())
 
                 // CSRF deaktivieren (für APIs oft sinnvoll, aber prüfe deine Anforderungen)
                 .csrf(AbstractHttpConfigurer::disable)
@@ -66,11 +46,8 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/data").permitAll()
                         .requestMatchers(HttpMethod.POST, "/data").permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/data").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/metrics/scenes/*/hit").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/metrics/playthroughs/hit").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/metrics/playthroughs").authenticated()
-                        .requestMatchers(HttpMethod.GET, "/metrics/scenes").authenticated()
-                        .requestMatchers(HttpMethod.POST, "/metrics/reset-all").authenticated()
+                        .requestMatchers(HttpMethod.POST, "/metrics/scenes/*/hit", "/metrics/playthroughs/hit").permitAll()
+                        .requestMatchers("/metrics/**").authenticated()
                         .requestMatchers("/data/export").authenticated()
                         // Alle anderen Endpunkte
                         .anyRequest().authenticated()
@@ -88,10 +65,35 @@ public class WebSecurityConfig {
                             Response customResponse = new Response();
                             customResponse.setResultText(ResultCode.NOT_AUTHORIZED.toString());
                             customResponse.setResultCode(ResultCode.NOT_AUTHORIZED.toInt());
-                            new ObjectMapper().writeValue(response.getOutputStream(), customResponse);
+                            objectMapper.writeValue(response.getOutputStream(), customResponse);
                         })
                 );
         return http.build();
+    }
+
+    @Bean
+    public UrlBasedCorsConfigurationSource corsConfigurationSource() {
+        var config = new CorsConfiguration();
+
+        config.setAllowedOrigins(List.of(
+                "https://hhn.github.io",
+                "https://kite.pages.it.hs-heilbronn.de",
+                "https://kite-app.de/"
+        ));
+
+        config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
+
+        config.setAllowedHeaders(List.of(
+                "Content-Type",
+                "X-Kite-Passphrase",
+                "Authorization"
+        ));
+
+        config.setAllowCredentials(true);
+
+        var source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
 
     @Bean

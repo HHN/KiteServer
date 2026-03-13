@@ -4,11 +4,8 @@ import com.hhn.kite2server.response.ResultCode;
 import com.hhn.kite2server.response.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Objects;
 
 /**
  * Controller for communication with the LLM (OpenAI).
