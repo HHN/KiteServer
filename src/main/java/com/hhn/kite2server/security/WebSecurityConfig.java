@@ -20,6 +20,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
@@ -29,8 +30,11 @@ import java.util.List;
 public class WebSecurityConfig {
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, ObjectMapper objectMapper) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, ObjectMapper objectMapper, TokenFilter tokenFilter) throws Exception {
         http
+                // Den TokenFilter vor dem Standard-Authentifizierungsfilter einfügen
+                .addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class)
+
                 // 1. CORS konfigurieren
                 .cors(Customizer.withDefaults())
 
@@ -39,6 +43,7 @@ public class WebSecurityConfig {
                 // Endpunkte konfigurieren:
                 .authorizeHttpRequests(auth -> auth
                         // Endpunkte, die uneingeschränkt erreichbar sein sollen
+                        .requestMatchers("/api/auth/**").permitAll() 
                         .requestMatchers(HttpMethod.POST, "/ai").permitAll()
                         .requestMatchers(HttpMethod.GET, "/version").permitAll()
                         .requestMatchers(HttpMethod.POST, "/role").permitAll()

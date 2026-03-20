@@ -121,9 +121,7 @@ public class GptService {
             }
 
             // Persistieren
-            AddDataObjectRequest add = new AddDataObjectRequest();
-            add.setCompletion(completion);
-            add.setPrompt(prompt);
+            AddDataObjectRequest add = new AddDataObjectRequest(prompt, completion);
             dataService.addDataObject(add);
 
             return completion;

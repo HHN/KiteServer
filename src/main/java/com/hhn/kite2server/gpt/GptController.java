@@ -2,9 +2,9 @@ package com.hhn.kite2server.gpt;
 
 import com.hhn.kite2server.response.ResultCode;
 import com.hhn.kite2server.response.Response;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -13,17 +13,11 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping(path = "ai")
+@RequiredArgsConstructor
 public class GptController {
 
     private static final Logger logger = LoggerFactory.getLogger(GptController.class);
     private final GptService gptService;
-
-    @Value("${KITE_PASSPHRASE}")
-    private String expectedPassphrase;
-
-    public GptController(GptService gptService) {
-        this.gptService = gptService;
-    }
 
     /**
      * Main endpoint for AI requests.
@@ -32,46 +26,29 @@ public class GptController {
      * @return The AI's response or an error message.
      */
     @PostMapping
-    public Response getCompletion(
-            @RequestHeader("X-Kite-Passphrase") String clientPassphrase,
-            @RequestBody GptRequest request) {
+    public Response getCompletion(@RequestBody GptRequest request) {
 
-        Response response = new Response();
-
-        if (expectedPassphrase == null || !expectedPassphrase.equals(clientPassphrase)) {
-            logger.warn("Unauthorised Access: Passphrase-Mismatch.");
-            response.setResultCode(ResultCode.FAILURE.toInt());
-            response.setResultText("Unauthorized.");
-            return response;
+        if (isBotRequest(request)) {
+            return Response.error(ResultCode.FAILURE, "Processing error."); // Aborted because bot detected
         }
 
-        if (isBotRequest(request, response)) {
-            return response; // Aborted because bot detected
-        }
-
-        String completion = gptService.getCompletion(request.getPrompt());
+        String completion = gptService.getCompletion(request.prompt());
 
         boolean isErrorPayload = completion != null && completion.startsWith("{\"error\"");
         if (completion == null || completion.isBlank() || isErrorPayload) {
-            response.setCompletion(completion);
-            response.setResultCode(ResultCode.FAILURE.toInt());
-            response.setResultText(ResultCode.FAILURE.toString());
-            return response;
+            return Response.error(ResultCode.FAILURE, "Failed to get completion from AI service.");
         }
-        response.setCompletion(completion);
-        response.setResultCode(ResultCode.SUCCESSFULLY_GOT_COMPLETION.toInt());
-        response.setResultText(ResultCode.SUCCESSFULLY_GOT_COMPLETION.toString());
-        return response;
+        return Response.success(ResultCode.SUCCESSFULLY_GOT_COMPLETION, completion);
     }
    
     /**
      * Checks whether the request is from a bot (honeypot check).
      * If so, the thread is artificially delayed (tarpit) to slow down the bot.
      */
-    private boolean isBotRequest(GptRequest request, Response response) {
+    private boolean isBotRequest(GptRequest request) {
         // The honeypot field ‘verification’ must be empty. Bots often fill it in automatically.
-        if (request.getVerification() != null && !request.getVerification().isBlank()) {
-            logger.warn("Bot detected! Honeypot field 'verification' was filled with: {}", request.getVerification());
+        if (request.verification() != null && !request.verification().isBlank()) {
+            logger.warn("Bot detected! Honeypot field 'verification' was filled with: {}", request.verification());
 
             // Tarpit: Artificial delay of 3 seconds.
             // This ties up the attacker's resources and makes brute force attacks inefficient.
@@ -80,10 +57,6 @@ public class GptController {
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
-
-            // We return a generic error to avoid giving the bot any clues about detection.
-            response.setResultCode(ResultCode.FAILURE.toInt());
-            response.setResultText("Processing error.");
             return true;
         }
         return false;
