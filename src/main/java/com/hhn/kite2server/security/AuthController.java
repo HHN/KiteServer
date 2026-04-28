@@ -12,20 +12,14 @@ public class AuthController {
 
     private final TempTokenService tokenService;
 
-    private final AuthService authService;
-
     @PostMapping("/session")
-    public Response createSession(@RequestHeader(value = "X-Kite-Passphrase", required = false) String clientPassphrase) {
-
-        // 1. Prüfen, ob die Passphrase stimmt
-        if (!authService.validatePassphrase(clientPassphrase)) {
-            return Response.error(ResultCode.NOT_AUTHORIZED, "Invalid Passphrase");
-        }
-
-        // 2. Token generieren
+    public Response createSession() {
         String token = tokenService.createToken();
 
-        // 3. Token zurückgeben
-        return Response.successWithText(ResultCode.SUCCESSFULLY_GOT_COMPLETION, token, "Session created");
+        return Response.successWithText(
+                ResultCode.SUCCESSFULLY_GOT_COMPLETION,
+                token,
+                "Session created"
+        );
     }
 }

@@ -77,6 +77,9 @@ security:
   api:
     username: ${ADMIN_USERNAME}
     password: ${ADMIN_PASSWORD}
+  kite:
+    hmac-secret: ${KITE_HMAC_SECRET}
+    passphrase: ${KITE_PASSPHRASE:}
 
 # Bucket4j Rate Limiting Configuration:
 # This setup protects your API endpoints from abuse and brute-force attacks.

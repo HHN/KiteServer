@@ -70,6 +70,40 @@ The project is structured into packages under `com.hhn.kite2server`. Important s
 
 The main entry point is `com.hhn.kite2server.Kite2ServerApplication`.
 
+## Security Configuration & API Authentication
+
+The project implements a multi-layered security approach to protect API endpoints:
+
+### 1. HMAC Request Validation
+- All requests are validated using HMAC-SHA256 signatures
+- The validator checks:
+  - **Timestamp Header**: Ensures the request is not older than 5 minutes (MAX_TIMESTAMP_AGE_SECONDS = 300)
+  - **Signature Header**: Validates the HMAC-SHA256 signature calculated from the timestamp and secret key
+  - **Secret Key**: Configured via `security.kite.hmac-secret` property
+- Validation is performed by `HmacRequestValidator` component
+
+### 2. Passphrase-based Authentication
+- An additional passphrase ("shared secret") is used to prevent unauthorized access to AI features
+- The passphrase is configured via `security.kite.passphrase` property
+- Validated by `AuthService` through direct comparison
+- Used to control access to GPT/AI endpoints
+
+### 3. Temporary Session Tokens
+- After successful authentication, clients receive a temporary session token
+- Tokens are created via `POST /api/auth/session` endpoint
+- Token validity: 10 minutes (600 seconds)
+- Tokens are stored in a `ConcurrentHashMap` and automatically cleaned up upon expiration
+- Managed by `TempTokenService`
+
+### Configuration Requirements
+Add the following to your `application.yml`:
+```yaml
+security:
+  kite:
+    hmac-secret: "your-secret-key-here"
+    passphrase: "your-passphrase-here"
+```
+
 ## Logging & Management
 - Actuator: Enabled (exposed endpoints are configurable in `application.yml`)
 - Access Logs: Configured in `application.yml` via Tomcat accesslog.
@@ -161,6 +195,40 @@ Das Projekt ist in Pakete unter `com.hhn.kite2server` strukturiert. Wichtige Sub
 - `gpt` — `GptController`, `GptService`, `GptConfig`
 
 Die Hauptklasse ist `com.hhn.kite2server.Kite2ServerApplication`.
+
+## Sicherheitskonfiguration & API-Authentifizierung
+
+Das Projekt implementiert einen mehrschichtigen Sicherheitsansatz zum Schutz der API-Endpunkte:
+
+### 1. HMAC-Request-Validierung
+- Alle Anfragen werden mit HMAC-SHA256-Signaturen validiert
+- Der Validator prüft:
+  - **Timestamp-Header**: Stellt sicher, dass die Anfrage nicht älter als 5 Minuten ist (MAX_TIMESTAMP_AGE_SECONDS = 300)
+  - **Signature-Header**: Validiert die HMAC-SHA256-Signatur, die aus Timestamp und Secret-Key berechnet wird
+  - **Secret Key**: Konfiguriert über `security.kite.hmac-secret` Property
+- Die Validierung wird durch die `HmacRequestValidator`-Komponente durchgeführt
+
+### 2. Passphrase-basierte Authentifizierung
+- Eine zusätzliche Passphrase ("Shared Secret") wird verwendet, um unbefugten Zugriff auf KI-Funktionen zu verhindern
+- Die Passphrase wird über `security.kite.passphrase` Property konfiguriert
+- Validiert durch `AuthService` mittels direktem Vergleich
+- Kontrolliert den Zugriff auf GPT/KI-Endpunkte
+
+### 3. Temporary Session Tokens
+- Nach erfolgreicher Authentifizierung erhalten Clients einen temporären Session-Token
+- Tokens werden via `POST /api/auth/session` Endpunkt erstellt
+- Token-Gültigkeitsdauer: 10 Minuten (600 Sekunden)
+- Tokens werden in einer `ConcurrentHashMap` gespeichert und automatisch bei Ablauf bereinigt
+- Verwaltet durch `TempTokenService`
+
+### Konfigurationsanforderungen
+Fügen Sie folgende Einstellungen zu Ihrer `application.yml` hinzu:
+```yaml
+security:
+  kite:
+    hmac-secret: "your-secret-key-here"
+    passphrase: "your-passphrase-here"
+```
 
 ## Logging & Management
 - Actuator ist aktiviert (exposed endpoints konfigurierbar in `application.yml`)

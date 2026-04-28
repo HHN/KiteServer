@@ -83,14 +83,15 @@ public class WebSecurityConfig {
         config.setAllowedOrigins(List.of(
                 "https://hhn.github.io",
                 "https://kite.pages.it.hs-heilbronn.de",
-                "https://kite-app.de/"
+                "https://kite-app.de"
         ));
 
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 
         config.setAllowedHeaders(List.of(
                 "Content-Type",
-                "X-Kite-Passphrase",
+                "X-Kite-Timestamp",
+                "X-Kite-Signature",
                 "Authorization"
         ));
 

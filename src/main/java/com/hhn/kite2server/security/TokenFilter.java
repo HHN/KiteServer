@@ -16,30 +16,47 @@ import java.io.IOException;
 public class TokenFilter extends OncePerRequestFilter {
 
     private final TempTokenService tokenService;
+    private final HmacRequestValidator hmacRequestValidator;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
-        // Wir schützen nur den /ai Endpunkt mit diesem Filter
-        if (!request.getRequestURI().startsWith("/ai")) {
-            filterChain.doFilter(request, response);
+        String path = request.getRequestURI();
+
+        // 1. Auth-Endpunkt: HMAC prüfen.
+        // Unity holt hiermit einen temporären Token.
+        if (path.startsWith("/api/auth")) {
+            String timestamp = request.getHeader("X-Kite-Timestamp");
+            String signature = request.getHeader("X-Kite-Signature");
+
+            if (hmacRequestValidator.isValid(timestamp, signature)) {
+                filterChain.doFilter(request, response);
+            } else {
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid HMAC Signature");
+            }
             return;
         }
 
-        // Header auslesen: "Authorization: Bearer <uuid>"
-        final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Missing or invalid Authorization header");
+        // 2. AI-Endpunkt: weiterhin Bearer Token prüfen.
+        // HMAC wird hier NICHT geprüft.
+        if (path.startsWith("/ai")) {
+            final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+
+            if (authHeader != null && authHeader.startsWith("Bearer ")) {
+                final String token = authHeader.substring(7);
+
+                if (tokenService.isValid(token)) {
+                    filterChain.doFilter(request, response);
+                    return;
+                }
+            }
+
+            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Missing or invalid Token");
             return;
         }
 
-        final String token = authHeader.substring(7); // "Bearer " abschneiden
-        if (!tokenService.isValid(token)) {
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Token is invalid or has expired");
-            return;
-        }
-
+        // 3. Alle anderen Requests an Spring Security weitergeben.
         filterChain.doFilter(request, response);
     }
 }
