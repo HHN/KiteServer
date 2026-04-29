@@ -4,6 +4,10 @@ import com.hhn.kite2server.response.Response;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * REST controller for managing interaction data objects via standard 
+ * CRUD operations.
+ */
 @RestController
 @RequestMapping(path = "data")
 @AllArgsConstructor

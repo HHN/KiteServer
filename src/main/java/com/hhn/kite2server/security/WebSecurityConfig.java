@@ -32,17 +32,17 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http, ObjectMapper objectMapper, TokenFilter tokenFilter) throws Exception {
         http
-                // Den TokenFilter vor dem Standard-Authentifizierungsfilter einfügen
+                // Insert TokenFilter before the standard authentication filter
                 .addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class)
 
-                // 1. CORS konfigurieren
+                // 1. Configure CORS
                 .cors(Customizer.withDefaults())
 
-                // CSRF deaktivieren (für APIs oft sinnvoll, aber prüfe deine Anforderungen)
+                // Disable CSRF (often useful for APIs, but check your requirements)
                 .csrf(AbstractHttpConfigurer::disable)
-                // Endpunkte konfigurieren:
+                // Configure endpoints:
                 .authorizeHttpRequests(auth -> auth
-                        // Endpunkte, die uneingeschränkt erreichbar sein sollen
+                        // Endpoints that should be accessible without restriction
                         .requestMatchers("/api/auth/**").permitAll() 
                         .requestMatchers(HttpMethod.POST, "/ai").permitAll()
                         .requestMatchers(HttpMethod.GET, "/version").permitAll()
@@ -54,23 +54,18 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.POST, "/metrics/scenes/*/hit", "/metrics/playthroughs/hit").permitAll()
                         .requestMatchers("/metrics/**").authenticated()
                         .requestMatchers("/data/export").authenticated()
-                        // Alle anderen Endpunkte
+                        // All other endpoints
                         .anyRequest().authenticated()
                 )
-                // HTTP Basic Authentication aktivieren
+                // Enable HTTP Basic Authentication
                 .httpBasic(Customizer.withDefaults())
-                // Session-Management auf stateless stellen
+                // Set session management to stateless
                 .sessionManagement(sessionManagement ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                // Exception-Handling: Bei fehlender Authentifizierung wird eine JSON-Antwort geliefert
+                // Exception handling: Return a JSON response if authentication is missing
                 .exceptionHandling(exceptionHandling ->
                         exceptionHandling.authenticationEntryPoint((request, response, e) -> {
-                            response.setContentType("application/json;charset=UTF-8");
-                            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-                            Response customResponse = new Response();
-                            customResponse.setResultText(ResultCode.NOT_AUTHORIZED.toString());
-                            customResponse.setResultCode(ResultCode.NOT_AUTHORIZED.toInt());
-                            objectMapper.writeValue(response.getOutputStream(), customResponse);
+                            SecurityResponseUtil.writeErrorResponse(response, objectMapper);
                         })
                 );
         return http.build();
@@ -107,13 +102,13 @@ public class WebSecurityConfig {
         return config.getAuthenticationManager();
     }
 
-    // Definiert den sicheren PasswordEncoder (BCrypt)
+    // Defines the secure PasswordEncoder (BCrypt)
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-    // Beispiel: In-Memory-Benutzerverwaltung mit verschlüsseltem Passwort
+    // Example: In-memory user management with encrypted password
     @Bean
     public UserDetailsService users(
             PasswordEncoder passwordEncoder,

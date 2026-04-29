@@ -21,6 +21,10 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Service responsible for communicating with the OpenAI API.
+ * Features circuit breaking, error handling, and interaction persistence.
+ */
 @RequiredArgsConstructor
 @Service
 public class GptService {
@@ -31,7 +35,7 @@ public class GptService {
 
     private final DataService dataService;
 
-    // Aus .env / OS-Env / application.yml
+    // Configuration values from .env, environment variables, or application.yml
     @Value("${openai.api.key:}")
     private String openaiApiKey;
 
@@ -49,6 +53,12 @@ public class GptService {
 
     private final OkHttpClient client = buildHttpClient();
 
+    /**
+     * Sends a prompt to OpenAI and returns the generated response.
+     *
+     * @param prompt The user input.
+     * @return The AI-generated completion text.
+     */
     @CircuitBreaker(name = "openai", fallbackMethod = "fallbackGetCompletion")
     public String getCompletion(String prompt) {
         try {
@@ -92,14 +102,14 @@ public class GptService {
             }
 
             if (status < 200 || status >= 300) {
-                // Fehlermeldung extrahieren (falls vorhanden)
+                // Extract error message if available
                 String apiMsg = extractErrorMessage(respString);
                 logger.error("OpenAI call failed: HTTP {} - {}", status, apiMsg != null ? apiMsg : respString);
                 // IMPORTANT: Throw an exception so that the circuit breaker counts the error!
                 throw new IOException(String.format("OpenAI-Fehler (HTTP %d): %s", status, apiMsg != null ? apiMsg : "siehe Server-Logs"));
             }
 
-            // Erfolgsfall: "choices[0].message.content" (Fallback auf "text", falls vorhanden)
+            // Success case: Extract content from "choices[0].message.content"
             JSONObject json = new JSONObject(respString);
             JSONArray choices = json.optJSONArray("choices");
             if (choices == null || choices.isEmpty()) {
@@ -113,14 +123,14 @@ public class GptService {
                 completion = choice0.getJSONObject("message").optString("content", null);
             }
             if (completion == null || completion.isBlank()) {
-                completion = choice0.optString("text", null); // Fallback für Modelle, die 'text' liefern
+                completion = choice0.optString("text", null); // Fallback for models providing 'text'
             }
             if (completion == null || completion.isBlank()) {
                 logger.error("Konnte keine Completion extrahieren: {}", respString);
                 throw new IOException("Konnte keine Antwort aus der API-Antwort extrahieren.");
             }
 
-            // Persistieren
+            // Persist the interaction
             AddDataObjectRequest add = new AddDataObjectRequest(prompt, completion);
             dataService.addDataObject(add);
 
@@ -134,8 +144,9 @@ public class GptService {
         }
     }
 
-    // This method is called when the circuit breaker is OPEN (automatic kill switch)
-    // or when an exception has been thrown.
+    /**
+     * Fallback method triggered by the Circuit Breaker when OpenAI is unavailable or errors occur.
+     */
     public String fallbackGetCompletion(String prompt, Throwable t) {
         logger.warn("Fallback ausgelöst (Circuit Breaker oder Fehler): {}", t.getMessage());
         return error("Der KI-Dienst ist derzeit aufgrund hoher Last oder technischer Probleme kurzzeitig nicht verfügbar. Bitte versuchen Sie es in ein paar Minuten erneut.");
@@ -148,7 +159,7 @@ public class GptService {
                 .writeTimeout(30, TimeUnit.SECONDS)
                 .callTimeout(120, TimeUnit.SECONDS);
 
-        // Optionales HTTP-Logging (DEBUG-Level). Achtung: große Responses & sensible Daten!
+        // Optional HTTP logging (DEBUG level).
         if (logger.isDebugEnabled()) {
             HttpLoggingInterceptor logging = new HttpLoggingInterceptor(msg -> logger.debug("OKHTTP {}", msg));
             logging.redactHeader("Authorization");
@@ -170,7 +181,7 @@ public class GptService {
     }
 
     private String error(String msg) {
-        // Einfaches JSON-Fehlerformat; ggf. an deinen Controller/Client anpassen
+        // Simple JSON error format
         return new JSONObject().put("error", msg).toString();
     }
 }

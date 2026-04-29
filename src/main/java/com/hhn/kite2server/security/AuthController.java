@@ -5,6 +5,9 @@ import com.hhn.kite2server.response.ResultCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+/**
+ * Controller for authentication-related endpoints.
+ */
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor

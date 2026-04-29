@@ -50,8 +50,7 @@ public class GptController {
         if (request.verification() != null && !request.verification().isBlank()) {
             logger.warn("Bot detected! Honeypot field 'verification' was filled with: {}", request.verification());
 
-            // Tarpit: Artificial delay of 3 seconds.
-            // This ties up the attacker's resources and makes brute force attacks inefficient.
+            // Tarpit: Artificial delay of 3 seconds to slow down automated attacks.
             try {
                 Thread.sleep(3000);
             } catch (InterruptedException e) {

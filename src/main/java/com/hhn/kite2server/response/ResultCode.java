@@ -1,5 +1,9 @@
 package com.hhn.kite2server.response;
 
+/**
+ * Enumeration of application-specific result codes used to communicate 
+ * the outcome of API requests to the client.
+ */
 public enum ResultCode {
     FAILURE(1),
     NOT_AUTHORIZED(2),
@@ -15,6 +19,10 @@ public enum ResultCode {
         this.code = code;
     }
 
+    /**
+     * Returns the integer representation of the result code for JSON serialization.
+     * @return the integer code.
+     */
     public int toInt() {
         return code;
     }

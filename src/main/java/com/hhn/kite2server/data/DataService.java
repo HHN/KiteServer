@@ -8,6 +8,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Service for managing the lifecycle of interaction data, 
+ * including retrieval, creation, and deletion.
+ */
 @RequiredArgsConstructor
 @Service
 public class DataService {

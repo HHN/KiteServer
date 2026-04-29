@@ -10,6 +10,10 @@ import java.security.MessageDigest;
 import java.time.Instant;
 import java.util.HexFormat;
 
+/**
+ * Validator for HMAC-SHA256 request signatures.
+ * Verifies that requests have not been tampered with and are within an acceptable time window.
+ */
 @Component
 public class HmacRequestValidator {
 
@@ -22,7 +26,14 @@ public class HmacRequestValidator {
         this.secret = secret;
     }
 
-    public boolean isValid(String timestampHeader, String signatureHeader) {
+    /**
+     * Validates the request signature using the timestamp, signature header, and request body.
+     * @param timestampHeader The X-Kite-Timestamp header value.
+     * @param signatureHeader The X-Kite-Signature header value.
+     * @param requestBody The raw request body.
+     * @return true if the signature is valid and the timestamp is fresh.
+     */
+    public boolean isValid(String timestampHeader, String signatureHeader, String requestBody) {
         if (timestampHeader == null || timestampHeader.isBlank()) {
             return false;
         }
@@ -45,7 +56,13 @@ public class HmacRequestValidator {
             return false;
         }
 
-        String expectedSignature = calculateHmac(timestampHeader, secret);
+        // Handle possible null requestBody (solution for common error source 1)
+        String body = (requestBody == null) ? "" : requestBody;
+
+        // Data for HMAC is timestamp + body
+        String data = timestampHeader + body;
+
+        String expectedSignature = calculateHmac(data, secret);
 
         return MessageDigest.isEqual(
                 expectedSignature.getBytes(StandardCharsets.UTF_8),
@@ -64,6 +81,7 @@ public class HmacRequestValidator {
 
             mac.init(keySpec);
 
+            // Using UTF-8 without BOM (solution for common error source 3)
             byte[] hash = mac.doFinal(data.getBytes(StandardCharsets.UTF_8));
 
             return HexFormat.of().formatHex(hash);

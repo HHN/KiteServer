@@ -3,6 +3,9 @@ package com.hhn.kite2server.security;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+/**
+ * Service for basic passphrase-based authentication logic.
+ */
 @Service
 public class AuthService {
 

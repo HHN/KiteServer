@@ -1,5 +1,6 @@
 package com.hhn.kite2server.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -8,15 +9,21 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 import java.io.IOException;
 
+import static com.hhn.kite2server.security.SecurityResponseUtil.writeErrorResponse;
+
+/**
+ * Filter responsible for validating security tokens and HMAC signatures.
+ * It intercepts requests to /api/auth/** for HMAC validation and /ai/** for Bearer token validation.
+ */
 @Component
 @RequiredArgsConstructor
 public class TokenFilter extends OncePerRequestFilter {
 
     private final TempTokenService tokenService;
     private final HmacRequestValidator hmacRequestValidator;
+    private final ObjectMapper objectMapper;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
@@ -24,23 +31,26 @@ public class TokenFilter extends OncePerRequestFilter {
 
         String path = request.getRequestURI();
 
-        // 1. Auth-Endpunkt: HMAC prüfen.
-        // Unity holt hiermit einen temporären Token.
         if (path.startsWith("/api/auth")) {
-            String timestamp = request.getHeader("X-Kite-Timestamp");
-            String signature = request.getHeader("X-Kite-Signature");
+            // Wrap the request so the body can be read for HMAC validation 
+            // while remaining available for the controller.
+            CachedBodyHttpServletRequest wrappedRequest = new CachedBodyHttpServletRequest(request);
+            
+            String timestamp = wrappedRequest.getHeader("X-Kite-Timestamp");
+            String signature = wrappedRequest.getHeader("X-Kite-Signature");
+            String body = wrappedRequest.getBody(); // Uses the wrapper's helper method
 
-            if (hmacRequestValidator.isValid(timestamp, signature)) {
-                filterChain.doFilter(request, response);
+            if (hmacRequestValidator.isValid(timestamp, signature, body)) {
+                filterChain.doFilter(wrappedRequest, response);
             } else {
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Invalid HMAC Signature");
+                writeErrorResponse(response, objectMapper);
             }
             return;
         }
 
-        // 2. AI-Endpunkt: weiterhin Bearer Token prüfen.
-        // HMAC wird hier NICHT geprüft.
         if (path.startsWith("/ai")) {
+            // For the AI endpoint, we only check the Bearer token. 
+            // Wrapping is only necessary here if we also wanted to read the body in the filter.
             final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
 
             if (authHeader != null && authHeader.startsWith("Bearer ")) {
@@ -52,11 +62,10 @@ public class TokenFilter extends OncePerRequestFilter {
                 }
             }
 
-            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "Missing or invalid Token");
+            writeErrorResponse(response, objectMapper);
             return;
         }
 
-        // 3. Alle anderen Requests an Spring Security weitergeben.
-        filterChain.doFilter(request, response);
+        filterChain.doFilter(request, response); // Continue with the filter chain for other requests
     }
 }

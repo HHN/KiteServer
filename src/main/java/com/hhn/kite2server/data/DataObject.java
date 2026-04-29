@@ -9,6 +9,10 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
+/**
+ * Entity representing a persisted interaction, storing the user's prompt, 
+ * the AI's completion, and a timestamp.
+ */
 @Getter
 @Setter
 @EqualsAndHashCode
