@@ -78,7 +78,8 @@ public class WebSecurityConfig {
         config.setAllowedOrigins(List.of(
                 "https://hhn.github.io",
                 "https://kite.pages.it.hs-heilbronn.de",
-                "https://kite-app.de"
+                "https://kite-app.de",
+                "https://ryanaella.github.io"
         ));
 
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));

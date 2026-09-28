@@ -16,8 +16,8 @@ public class TempTokenService {
     // Maps token string to its expiration instant
     private final Map<String, Instant> tokenStore = new ConcurrentHashMap<>();
 
-    // Token validity duration (10 minutes)
-    private static final long VALIDITY_SECONDS = 600;
+    // Token validity duration (1 hour)
+    private static final long VALIDITY_SECONDS = 3600;
 
     /**
      * Creates a new temporary token and stores it with an expiration timestamp.
