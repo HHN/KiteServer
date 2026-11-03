@@ -1,0 +1,30 @@
+# Test-Konfiguration: gilt nur bei @ActiveProfiles("test").
+# Eigene Datenbank kite_test + create-drop: das Schema wird beim Start erzeugt
+# und danach wieder gelöscht. Die registration-DB (lokal/Prod) wird nie angerührt.
+# Alle Secrets sind Test-Werte – nichts muss aus .env oder CI-Secrets kommen.
+spring:
+  datasource:
+    url: ${TEST_DB_URL:jdbc:postgresql://localhost:5432/kite_test?charSet=UTF8}
+    username: ${TEST_DB_USERNAME:postgres}
+    password: ${TEST_DB_PASSWORD:password}
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+
+security:
+  api:
+    username: testadmin
+    password: testpass
+  kite:
+    hmac-secret: test-hmac-secret
+    passphrase: ""
+
+app:
+  internal:
+    api:
+      key: test-internal-key
+
+openai:
+  enabled: false
+  api:
+    key: test-openai-key
