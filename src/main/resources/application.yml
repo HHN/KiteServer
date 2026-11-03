@@ -5,8 +5,8 @@ app:
 
 server:
   error:
-    include-message: always
-    include-binding-errors: always
+    include-message: on_param
+    include-binding-errors: on_param
   port: 8080
   ssl:
     enabled: false
@@ -21,25 +21,25 @@ server:
 
 spring:
   datasource:
-    password: password
-    url: jdbc:postgresql://localhost:5432/registration?charSet=UTF8
-    username: postgres
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
-        format_sql: true
+        format_sql: false
         connection:
           charSet: UTF-8
-    show-sql: true
+    show-sql: false
 
 logging:
   level:
     root: INFO
-    org.springframework.web: DEBUG
+    org.springframework.web: INFO
   file:
     path: ./log
 

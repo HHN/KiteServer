@@ -43,11 +43,9 @@ public class WebSecurityConfig {
                 // Configure endpoints:
                 .authorizeHttpRequests(auth -> auth
                         // Endpoints that should be accessible without restriction
+                        .requestMatchers("/error").permitAll()
                         .requestMatchers("/api/auth/**").permitAll() 
                         .requestMatchers(HttpMethod.POST, "/ai").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/version").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/role").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/actuator/mappings").permitAll()
                         .requestMatchers(HttpMethod.POST, "/metrics/scenes/*/hit", "/metrics/playthroughs/hit").permitAll()
                         .requestMatchers("/metrics/**").authenticated()
                         .requestMatchers("/data/**").authenticated()
@@ -110,8 +108,8 @@ public class WebSecurityConfig {
     @Bean
     public UserDetailsService users(
             PasswordEncoder passwordEncoder,
-            @Value("${security.api.username:KiteRoot}") String user,
-            @Value("${security.api.password:fallback-geheim}") String pass) {
+            @Value("${security.api.username}") String user,
+            @Value("${security.api.password}") String pass) {
 
         return new InMemoryUserDetailsManager(
                 User.withUsername(user)
