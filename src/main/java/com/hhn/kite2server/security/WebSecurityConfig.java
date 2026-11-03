@@ -48,12 +48,9 @@ public class WebSecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/version").permitAll()
                         .requestMatchers(HttpMethod.POST, "/role").permitAll()
                         .requestMatchers(HttpMethod.GET, "/actuator/mappings").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/data").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/data").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/data").permitAll()
                         .requestMatchers(HttpMethod.POST, "/metrics/scenes/*/hit", "/metrics/playthroughs/hit").permitAll()
                         .requestMatchers("/metrics/**").authenticated()
-                        .requestMatchers("/data/export").authenticated()
+                        .requestMatchers("/data/**").authenticated()
                         // All other endpoints
                         .anyRequest().authenticated()
                 )

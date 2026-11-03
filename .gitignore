@@ -33,3 +33,12 @@ build/
 .vscode/
 
 /.env
+
+### Logs & Keystore – niemals committen ###
+log/
+logs/
+server.log*
+spring.log*
+access_log*
+*.p12
+*.jks

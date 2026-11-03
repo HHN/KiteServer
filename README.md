@@ -91,7 +91,7 @@ The project implements a multi-layered security approach to protect API endpoint
 ### 3. Temporary Session Tokens
 - After successful authentication, clients receive a temporary session token
 - Tokens are created via `POST /api/auth/session` endpoint
-- Token validity: 10 minutes (600 seconds)
+- Token validity: 60 minutes (3600 seconds)
 - Tokens are stored in a `ConcurrentHashMap` and automatically cleaned up upon expiration
 - Managed by `TempTokenService`
 
@@ -217,7 +217,7 @@ Das Projekt implementiert einen mehrschichtigen Sicherheitsansatz zum Schutz der
 ### 3. Temporary Session Tokens
 - Nach erfolgreicher Authentifizierung erhalten Clients einen temporären Session-Token
 - Tokens werden via `POST /api/auth/session` Endpunkt erstellt
-- Token-Gültigkeitsdauer: 10 Minuten (600 Sekunden)
+- Token-Gültigkeitsdauer: 60 Minuten (3600 Sekunden)
 - Tokens werden in einer `ConcurrentHashMap` gespeichert und automatisch bei Ablauf bereinigt
 - Verwaltet durch `TempTokenService`
 
