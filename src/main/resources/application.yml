@@ -36,8 +36,6 @@ spring:
     show-sql: false
   cache:
     type: jcache
-    cache-names:
-      - buckets
 
 logging:
   level:
