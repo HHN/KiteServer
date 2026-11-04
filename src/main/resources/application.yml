@@ -30,11 +30,12 @@ spring:
       ddl-auto: validate
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
         format_sql: false
         connection:
           charSet: UTF-8
     show-sql: false
+  cache:
+    type: jcache
 
 logging:
   level:
@@ -83,35 +84,32 @@ security:
 
 # Bucket4j Rate Limiting Configuration:
 # This setup protects your API endpoints from abuse and brute-force attacks.
-# It uses two different filters:
-# 1. Metrics Filter: Limits requests to /metrics endpoints to 30 per minute per IP address.
-# 2. AI Filter: A stricter limit for /ai POST requests, allowing only 5 attempts per 10 minutes, 
-# tracked by a combination of IP address and Session ID.
-# The 'greedy' refill strategy ensures tokens are restored gradually over time.
+# 1. Metrics Filter: 300 requests/minute per IP on the /metrics hit endpoints
+#    (generous enough for school classes sharing one NAT IP).
+# 2. AI Filter: 5 requests/10 minutes, keyed by IP + Bearer token, so every
+#    client (pupil) gets their own budget. Invalid tokens share one bucket but
+#    never reach the expensive OpenAI path (rejected by TokenFilter).
 bucket4j:
   enabled: true
   filters:
     - cache-name: buckets
-      filter-method: auto
+      filter-method: servlet
       filter-order: 1
       url: /metrics/(playthroughs/hit|scenes/.*/hit)
       strategy: first
       rate-limits:
-        - expression: "getRemoteAddr()"
+        - cache-key: "getRemoteAddr()"
           bandwidths:
-            - capacity: 30
+            - capacity: 300
               time: 1
               unit: minutes
-              refill-strategy: greedy
     - cache-name: buckets
+      filter-method: servlet
       filter-order: 2
       url: /ai
-      http-methods:
-        - POST
       rate-limits:
-        - cache-key: "getRemoteAddr() + '-' + getSession().getId()"
+        - cache-key: "getRemoteAddr() + '-' + getHeader('Authorization')"
           bandwidths:
             - capacity: 5
               time: 10
               unit: minutes
-              refill-strategy: greedy
