@@ -47,7 +47,7 @@ public class DataExportController {
     }
 
     // RFC4180 compliance: quote only if necessary, escape double quotes
-    private String toCsvField(String value) {
+    static String toCsvField(String value) {
         if (value == null) return "";
 
         // CSV Injection protection (Excel executes cells starting with =, +, -, @ as formulas).

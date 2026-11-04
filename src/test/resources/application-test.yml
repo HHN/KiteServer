@@ -4,7 +4,7 @@
 # Alle Secrets sind Test-Werte – nichts muss aus .env oder CI-Secrets kommen.
 spring:
   datasource:
-    url: ${TEST_DB_URL:jdbc:postgresql://localhost:5432/kite_test?charSet=UTF8}
+    url: ${TEST_DB_URL:jdbc:postgresql://127.0.0.1:5432/kite_test?charSet=UTF8}
     username: ${TEST_DB_USERNAME:postgres}
     password: ${TEST_DB_PASSWORD:password}
   jpa:
