@@ -38,3 +38,20 @@ jobs:
 
       - name: Build & Test
         run: ./mvnw -B verify
+
+      - name: Dump surefire error details
+        if: failure()
+        run: |
+          for f in target/surefire-reports/*.txt; do
+            if grep -qE "Errors: [1-9]|Failures: [1-9]" "$f"; then
+              echo "===== $f ====="
+              grep -E "Tests run:|Caused by:|default message|^[a-zA-Z.$]+(Exception|Error)" "$f" | sort -u | head -40
+            fi
+          done
+
+      - name: Upload surefire reports
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: surefire-reports
+          path: target/surefire-reports/*.txt
