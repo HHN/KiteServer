@@ -48,7 +48,7 @@ public class TokenFilter extends OncePerRequestFilter {
             return;
         }
 
-        if (path.startsWith("/ai")) {
+        if (path.equals("/ai")) {
             // For the AI endpoint, we only check the Bearer token. 
             // Wrapping is only necessary here if we also wanted to read the body in the filter.
             final String authHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
