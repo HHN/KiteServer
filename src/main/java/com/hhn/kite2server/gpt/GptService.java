@@ -1,29 +1,31 @@
 package com.hhn.kite2server.gpt;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.hhn.kite2server.data.AddDataObjectRequest;
 import com.hhn.kite2server.data.DataService;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
-import okhttp3.MediaType;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
-import okhttp3.ResponseBody;
-import okhttp3.logging.HttpLoggingInterceptor;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.client.JdkClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestClient;
 
 import java.io.IOException;
-import java.util.concurrent.TimeUnit;
+import java.net.http.HttpClient;
+import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 
 /**
  * Service responsible for communicating with the OpenAI API.
  * Features circuit breaking, error handling, and interaction persistence.
+ * Uses Spring's RestClient (no third-party HTTP/JSON dependencies).
  */
 @RequiredArgsConstructor
 @Service
@@ -31,9 +33,9 @@ public class GptService {
 
     private static final Logger logger = LoggerFactory.getLogger(GptService.class);
     private static final String OPENAI_CHAT_URL = "https://api.openai.com/v1/chat/completions";
-    private static final MediaType JSON = MediaType.parse("application/json");
 
     private final DataService dataService;
+    private final ObjectMapper objectMapper;
 
     // Configuration values from .env, environment variables, or application.yml
     @Value("${openai.api.key:}")
@@ -51,7 +53,7 @@ public class GptService {
     @Value("${openai.enabled:true}")
     private boolean openaiEnabled;
 
-    private final OkHttpClient client = buildHttpClient();
+    private final RestClient restClient = buildRestClient();
 
     /**
      * Sends a prompt to OpenAI and returns the generated response.
@@ -75,57 +77,61 @@ public class GptService {
                 return error("Prompt ist leer.");
             }
 
-            JSONObject jsonBody = new JSONObject()
-                    .put("model", model)
-                    .put("messages", new JSONArray()
-                            .put(new JSONObject().put("role", "system").put("content", "You are a helpful assistant."))
-                            .put(new JSONObject().put("role", "user").put("content", prompt))
-                    )
-                    .put("max_tokens", maxTokens)
-                    .put("temperature", temperature);
+            ObjectNode jsonBody = objectMapper.createObjectNode();
+            jsonBody.put("model", model);
+            jsonBody.put("max_tokens", maxTokens);
+            jsonBody.put("temperature", temperature);
+            ArrayNode messages = jsonBody.putArray("messages");
+            messages.addObject().put("role", "system").put("content", "You are a helpful assistant.");
+            messages.addObject().put("role", "user").put("content", prompt);
 
-            RequestBody body = RequestBody.create(jsonBody.toString(), JSON);
-
-            Request request = new Request.Builder()
-                    .url(OPENAI_CHAT_URL)
-                    .post(body)
-                    .addHeader("Content-Type", "application/json")
-                    .addHeader("Authorization", "Bearer " + openaiApiKey)
-                    .build();
-
-            String respString;
-            int status;
-            try (Response response = client.newCall(request).execute()) {
-                status = response.code();
-                ResponseBody responseBody = response.body();
-                respString = responseBody != null ? responseBody.string() : "";
+            if (logger.isDebugEnabled()) {
+                logger.debug("OpenAI request body: {}", jsonBody);
             }
 
-            if (status < 200 || status >= 300) {
-                // Extract error message if available
-                String apiMsg = extractErrorMessage(respString);
-                logger.error("OpenAI call failed: HTTP {} - {}", status, apiMsg != null ? apiMsg : respString);
-                // IMPORTANT: Throw an exception so that the circuit breaker counts the error!
-                throw new IOException(String.format("OpenAI-Fehler (HTTP %d): %s", status, apiMsg != null ? apiMsg : "siehe Server-Logs"));
+            String respString = restClient.post()
+                    .uri(OPENAI_CHAT_URL)
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .header(HttpHeaders.AUTHORIZATION, "Bearer " + openaiApiKey)
+                    .body(jsonBody.toString())
+                    .retrieve()
+                    .onStatus(status -> !status.is2xxSuccessful(), (request, response) -> {
+                        String errorBody = response.getBody() != null
+                                ? new String(response.getBody().readAllBytes(), StandardCharsets.UTF_8)
+                                : "";
+                        String apiMsg = extractErrorMessage(errorBody);
+                        logger.error("OpenAI call failed: HTTP {} - {}",
+                                response.getStatusCode().value(), apiMsg != null ? apiMsg : errorBody);
+                        // IMPORTANT: Throw an exception so that the circuit breaker counts the error!
+                        throw new IOException(String.format("OpenAI-Fehler (HTTP %d): %s",
+                                response.getStatusCode().value(), apiMsg != null ? apiMsg : "siehe Server-Logs"));
+                    })
+                    .body(String.class);
+
+            if (respString == null) {
+                respString = "";
             }
 
             // Success case: Extract content from "choices[0].message.content"
-            JSONObject json = new JSONObject(respString);
-            JSONArray choices = json.optJSONArray("choices");
-            if (choices == null || choices.isEmpty()) {
+            JsonNode choices = objectMapper.readTree(respString).get("choices");
+            if (choices == null || !choices.isArray() || choices.isEmpty()) {
                 logger.error("Antwort ohne 'choices': {}", respString);
                 throw new IOException("Unerwartete Antwortstruktur der OpenAI API (kein 'choices' in der Antwort).");
             }
 
-            JSONObject choice0 = choices.getJSONObject(0);
+            JsonNode choice0 = choices.get(0);
             String completion = null;
-            if (choice0.has("message")) {
-                completion = choice0.getJSONObject("message").optString("content", null);
+            JsonNode content = choice0.path("message").path("content");
+            if (content.isTextual() && !content.asText().isBlank()) {
+                completion = content.asText();
             }
-            if (completion == null || completion.isBlank()) {
-                completion = choice0.optString("text", null); // Fallback for models providing 'text'
+            if (completion == null) {
+                JsonNode text = choice0.path("text"); // Fallback for models providing 'text'
+                if (text.isTextual() && !text.asText().isBlank()) {
+                    completion = text.asText();
+                }
             }
-            if (completion == null || completion.isBlank()) {
+            if (completion == null) {
                 logger.error("Konnte keine Completion extrahieren: {}", respString);
                 throw new IOException("Konnte keine Antwort aus der API-Antwort extrahieren.");
             }
@@ -152,29 +158,21 @@ public class GptService {
         return error("Der KI-Dienst ist derzeit aufgrund hoher Last oder technischer Probleme kurzzeitig nicht verfügbar. Bitte versuchen Sie es in ein paar Minuten erneut.");
     }
 
-    private OkHttpClient buildHttpClient() {
-        OkHttpClient.Builder builder = new OkHttpClient.Builder()
-                .connectTimeout(20, TimeUnit.SECONDS)
-                .readTimeout(90, TimeUnit.SECONDS)
-                .writeTimeout(30, TimeUnit.SECONDS)
-                .callTimeout(120, TimeUnit.SECONDS);
-
-        // Optional HTTP logging (DEBUG level).
-        if (logger.isDebugEnabled()) {
-            HttpLoggingInterceptor logging = new HttpLoggingInterceptor(msg -> logger.debug("OKHTTP {}", msg));
-            logging.redactHeader("Authorization");
-            logging.setLevel(HttpLoggingInterceptor.Level.BODY);
-            builder.addInterceptor(logging);
-        }
-
-        return builder.build();
+    private RestClient buildRestClient() {
+        HttpClient httpClient = HttpClient.newBuilder()
+                .connectTimeout(Duration.ofSeconds(20))
+                .build();
+        JdkClientHttpRequestFactory factory = new JdkClientHttpRequestFactory(httpClient);
+        factory.setReadTimeout(Duration.ofSeconds(90));
+        return RestClient.builder()
+                .requestFactory(factory)
+                .build();
     }
 
     private String extractErrorMessage(String respString) {
         try {
-            JSONObject root = new JSONObject(respString);
-            JSONObject err = root.optJSONObject("error");
-            return err != null ? err.optString("message", null) : null;
+            JsonNode err = objectMapper.readTree(respString).path("error");
+            return err.isObject() && err.hasNonNull("message") ? err.get("message").asText() : null;
         } catch (Exception ignore) {
             return null;
         }
@@ -182,6 +180,6 @@ public class GptService {
 
     private String error(String msg) {
         // Simple JSON error format
-        return new JSONObject().put("error", msg).toString();
+        return objectMapper.createObjectNode().put("error", msg).toString();
     }
 }
