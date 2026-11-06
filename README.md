@@ -4,7 +4,7 @@ Kite2Server is a Spring Boot (Java) backend project featuring REST APIs for data
 
 Quick Overview
 - Java: 17
-- Spring Boot: 3.x (Parent in `pom.xml` 3.1.0)
+- Spring Boot: 3.x (Parent in `pom.xml` 3.5.16)
 - Main Class: `com.hhn.kite2server.Kite2ServerApplication`
 - Build Tool: Maven (uses `./mvnw` / `mvnw.cmd` on Windows)
 
